@@ -4,8 +4,24 @@
   "description": "Count and chart metrics",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "production": "webpack -p",
+    "start": "webpack-dev-server --inline"
   },
   "author": "Yujin Cho",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.18.0",
+    "babel-loader": "^6.2.7",
+    "babel-preset-react": "^6.16.0",
+    "html-webpack-plugin": "^2.24.0",
+    "install": "^0.8.2",
+    "npm": "^3.10.9",
+    "webpack": "^1.13.3",
+    "webpack-dev-server": "^1.16.2"
+  },
+  "dependencies": {
+    "react": "^15.3.2",
+    "react-bootstrap": "^0.30.5",
+    "react-dom": "^15.3.2"
+  }
 }
