@@ -5,8 +5,6 @@ var Col = require('react-bootstrap/lib/Col');
 var ChartContainer = React.createClass({
   render: function() {
     var chartRow = {
-      border: '1px solid purple',
-      background: 'pink',
       flex: 2,
       overflow: 'auto'
     };

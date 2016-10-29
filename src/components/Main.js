@@ -9,7 +9,6 @@ var ButtonContainer = require('./ButtonContainer');
 var Main = React.createClass({
   render: function() {
     var mainContainer = {
-      border: '2px solid green',
       display: 'flex',
       flexFlow: 'column',
       height: '100%'
