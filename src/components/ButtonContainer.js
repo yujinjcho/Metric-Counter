@@ -9,20 +9,21 @@ var ButtonContainer = React.createClass({
       buttonStyle: {
         width: '98%',
         background: '#0074D9',
-        height: 55,
+        height: 50,
         fontSize: 20,
         border: 'none',
         color: 'white',
         opacity: 0.8,
         boxShadow :'0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)',
-        fontFamily: 'Arial'
+        fontFamily: 'Arial',
+        zIndex: 5
       }
     }
   },
   render: function() {
     var buttonRow = {
       background: 'white',
-      height: 65,
+      height: 60,
       textAlign: 'center'
     };
 
@@ -36,7 +37,7 @@ var ButtonContainer = React.createClass({
   },
   handleClick: function() {
     this.changeButtonStyle(0.5);
-    setTimeout(function(){ this.changeButtonStyle(0.8) }.bind(this), 180);
+    setTimeout(function(){ this.changeButtonStyle(0.8) }.bind(this), 155);
   },
   changeButtonStyle: function(opacityLevel) {
     this.setState({
