@@ -21,6 +21,7 @@
     "webpack-dev-server": "^1.16.2"
   },
   "dependencies": {
+    "express": "^4.14.0",
     "react": "^15.3.2",
     "react-addons-update": "^15.3.2",
     "react-bootstrap": "^0.30.5",
