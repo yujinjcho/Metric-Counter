@@ -14,7 +14,8 @@ var ChartContainer = React.createClass({
       textAlign: 'center',
       display: 'flex',
       flexFlow: 'column',
-      height: '100%'
+      height: '100%',
+      paddingTop: 50
     };
 
     var divider = {
