@@ -17,15 +17,13 @@ var Main = React.createClass({
       paddingRight: 0
     };
 
-    const gridInstance = (
+    return (
       <Grid style={mainContainer}>
         <NavbarInstance />
         <ChartContainer />
         <ButtonContainer />
       </Grid>
     )
-
-    return gridInstance
   }
 });
 

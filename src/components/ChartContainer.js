@@ -7,6 +7,21 @@ var $ = require('jquery');
 var ChartContainer = React.createClass({
   getInitialState: function() {
     return {
+      daily: [],
+      cumulative: [],
+      test: 'hi'
+    };
+  },
+  componentDidMount: function() {
+    this.loadDummyData();
+  },
+  loadData: function() {
+    $.ajax('/api/data/').done(function(data){
+      this.setState(data);
+    }.bind(this));
+  },
+  loadDummyData: function() {
+    var data = {
       daily: [
         ['x', '01-01', '01-02', '01-03', '01-04', '01-05', '01-06', '01-07'],
         ['daily', 2, 2, 3, 3, 4, 4, 5]
@@ -16,11 +31,6 @@ var ChartContainer = React.createClass({
         ['daily', 2, 4, 7, 10, 14, 19, 24]
       ]
     };
-  },
-  loadData: function() {
-    $.ajax('/api/data').done(function(data) {
-      this.setState({data: data})
-    }.bind(this));
   },
   render: function() {
     var chartRow = {
