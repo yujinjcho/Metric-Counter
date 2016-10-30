@@ -1,11 +1,22 @@
 var React = require('react');
 var Row = require('react-bootstrap/lib/Row');
 var Col = require('react-bootstrap/lib/Col');
-var DailyChart = require('./DailyChart');
-var CumulativeChart = require('./CumulativeChart');
+var ChartInstance = require('./ChartInstance');
 
 
 var ChartContainer = React.createClass({
+  formatDataInput: function(dates, points) {
+    var chartData = {
+      x: 'x',
+      xFormat: '%m-%d',
+      columns: [dates, points],
+      types: {
+        daily: 'bar'
+      },
+      labels:true
+    };
+    return chartData;
+  },
   render: function() {
     var chartRow = {
       flex: 2,
@@ -50,18 +61,25 @@ var ChartContainer = React.createClass({
     return (
       <Row className='show-grid' style={chartRow}>
         <Col style={chartContainer} xs={12}>
-            <DailyChart
+            <ChartInstance
+              title="Daily"
               style={chartFormat.chartStyle}
               axis={chartFormat.axis}
               legend={chartFormat.legend}
+              points={this.props.dailyPoints}
+              dates={this.props.dailyDates}
+              formatInputs={this.formatDataInput}
             />
             <div style={divider}></div>
-            <CumulativeChart
+            <ChartInstance
+              title="Cumulative"
               style={chartFormat.chartStyle}
               axis={chartFormat.axis}
               legend={chartFormat.legend}
+              points={this.props.cumulativePoints}
+              dates={this.props.cumulativeDates}
+              formatInputs={this.formatDataInput}
             />
-
         </Col>
       </Row>
     )
