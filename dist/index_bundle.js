@@ -21438,8 +21438,8 @@
 	var Row = __webpack_require__(269);
 	var Col = __webpack_require__(270);
 	var ChartContainer = __webpack_require__(271);
-	var ButtonContainer = __webpack_require__(280);
-	var NavbarInstance = __webpack_require__(281);
+	var ButtonContainer = __webpack_require__(279);
+	var NavbarInstance = __webpack_require__(280);
 
 	var Main = React.createClass({
 	  displayName: 'Main',
@@ -24003,7 +24003,7 @@
 	var React = __webpack_require__(2);
 	var Row = __webpack_require__(269);
 	var Col = __webpack_require__(270);
-	var ChartInstance = __webpack_require__(284);
+	var ChartInstance = __webpack_require__(272);
 
 	var ChartContainer = React.createClass({
 	  displayName: 'ChartContainer',
@@ -24094,7 +24094,52 @@
 	module.exports = ChartContainer;
 
 /***/ },
-/* 272 */,
+/* 272 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _reactC3js = __webpack_require__(273);
+
+	var _reactC3js2 = _interopRequireDefault(_reactC3js);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var React = __webpack_require__(2);
+	var update = __webpack_require__(276);
+	var $ = __webpack_require__(278);
+
+
+	var ChartInstance = React.createClass({
+	  displayName: 'ChartInstance',
+
+	  getInitialState: function getInitialState() {
+	    return {
+	      title: {
+	        text: this.props.title
+	      }
+	    };
+	  },
+	  formatData: function formatData() {
+	    var dates = this.props.dates;
+	    var points = this.props.points;
+	    return this.props.formatInputs(dates, points);
+	  },
+	  formatTitle: function formatTitle() {},
+	  render: function render() {
+	    return React.createElement(_reactC3js2.default, {
+	      style: this.props.style,
+	      title: this.state.title,
+	      data: this.formatData(),
+	      legend: this.props.legend,
+	      axis: this.props.axis
+	    });
+	  }
+	});
+
+	module.exports = ChartInstance;
+
+/***/ },
 /* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -52374,8 +52419,7 @@
 
 
 /***/ },
-/* 279 */,
-/* 280 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52437,7 +52481,7 @@
 	module.exports = ButtonContainer;
 
 /***/ },
-/* 281 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52496,54 +52540,6 @@
 	});
 
 	module.exports = NavbarInstance;
-
-/***/ },
-/* 282 */,
-/* 283 */,
-/* 284 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _reactC3js = __webpack_require__(273);
-
-	var _reactC3js2 = _interopRequireDefault(_reactC3js);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var React = __webpack_require__(2);
-	var update = __webpack_require__(276);
-	var $ = __webpack_require__(278);
-
-
-	var ChartInstance = React.createClass({
-	  displayName: 'ChartInstance',
-
-	  getInitialState: function getInitialState() {
-	    return {
-	      title: {
-	        text: this.props.title
-	      }
-	    };
-	  },
-	  formatData: function formatData() {
-	    var dates = this.props.dates;
-	    var points = this.props.points;
-	    return this.props.formatInputs(dates, points);
-	  },
-	  formatTitle: function formatTitle() {},
-	  render: function render() {
-	    return React.createElement(_reactC3js2.default, {
-	      style: this.props.style,
-	      title: this.state.title,
-	      data: this.formatData(),
-	      legend: this.props.legend,
-	      axis: this.props.axis
-	    });
-	  }
-	});
-
-	module.exports = ChartInstance;
 
 /***/ }
 /******/ ]);
