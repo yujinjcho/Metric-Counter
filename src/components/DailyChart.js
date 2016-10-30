@@ -25,6 +25,7 @@ var DailyChart = React.createClass({
       ['x', '01-01', '01-02', '01-03', '01-04', '01-05', '01-06', '01-07'],
       ['daily', 2, 2, 3, 3, 4, 4, 10]
     ];
+
     this.setState({
       chartData: update(this.state.chartData, {columns: {$set: cols}})
     });
@@ -33,7 +34,7 @@ var DailyChart = React.createClass({
     return (
       <C3Chart
         style={this.props.style}
-        title={this.state.title}
+        title={this.state.chartTitle}
         data={this.state.chartData}
         legend={this.props.legend}
         axis={this.props.axis}

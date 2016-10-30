@@ -46,7 +46,7 @@ var ChartContainer = React.createClass({
       legend: {
         hide: true
       }
-    }
+    };
 
     return (
       <Row className='show-grid' style={chartRow}>

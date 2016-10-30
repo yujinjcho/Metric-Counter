@@ -33,7 +33,7 @@ var CumulativeChart = React.createClass({
     return (
       <C3Chart
         style={this.props.style}
-        title={this.state.title}
+        title={this.state.chartTitle}
         data={this.state.chartData}
         legend={this.props.legend}
         axis={this.props.axis}
