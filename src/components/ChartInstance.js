@@ -1,6 +1,4 @@
 var React = require('react');
-var update = require('react-addons-update');
-var $ = require('jquery');
 import C3Chart from 'react-c3js';
 
 
@@ -14,7 +12,7 @@ var ChartInstance = React.createClass({
   },
   formatData: function() {
     var dates = this.props.dates;
-    var points = this.props.points;
+    var points = this.props.data;
     return this.props.formatInputs(dates, points);
   },
   formatTitle: function() {

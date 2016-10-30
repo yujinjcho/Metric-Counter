@@ -66,8 +66,8 @@ var ChartContainer = React.createClass({
               style={chartFormat.chartStyle}
               axis={chartFormat.axis}
               legend={chartFormat.legend}
-              points={this.props.dailyPoints}
-              dates={this.props.dailyDates}
+              data={this.props.dailyData}
+              dates={this.props.dateLabels}
               formatInputs={this.formatDataInput}
             />
             <div style={divider}></div>
@@ -76,8 +76,8 @@ var ChartContainer = React.createClass({
               style={chartFormat.chartStyle}
               axis={chartFormat.axis}
               legend={chartFormat.legend}
-              points={this.props.cumulativePoints}
-              dates={this.props.cumulativeDates}
+              data={this.props.cumulativeData}
+              dates={this.props.dateLabels}
               formatInputs={this.formatDataInput}
             />
         </Col>
