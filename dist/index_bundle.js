@@ -21435,8 +21435,8 @@
 
 	var React = __webpack_require__(2);
 	var Grid = __webpack_require__(174);
-	var Row = __webpack_require__(269);
-	var Col = __webpack_require__(270);
+	var $ = __webpack_require__(278);
+
 	var ChartContainer = __webpack_require__(271);
 	var ButtonContainer = __webpack_require__(279);
 	var NavbarInstance = __webpack_require__(280);
@@ -21446,23 +21446,38 @@
 
 	  getInitialState: function getInitialState() {
 	    return {
-	      dailyPoints: ['daily', 2, 2, 3, 3, 4, 4, 10],
-	      dailyDates: ['x', '01-01', '01-02', '01-03', '01-04', '01-05', '01-06', '01-07'],
-	      cumulativePoints: ['daily', 2, 4, 5, 6, 7, 8, 10],
-	      cumulativeDates: ['x', '01-01', '01-02', '01-03', '01-04', '01-05', '01-06', '01-07']
+	      dateLabels: [],
+	      dailyData: [],
+	      cumulativeData: []
 	    };
 	  },
 	  componentDidMount: function componentDidMount() {
-	    var newPoints = ['daily', 2, 2, 3, 3, 4, 4, 2];
-	    var newDates = ['x', '01-01', '01-02', '01-03', '01-04', '01-05', '01-06', '01-07'];
-	    var newCumulativePoints = ['daily', 2, 4, 5, 6, 7, 8, 15];
-	    var newCumulativeDates = ['x', '01-01', '01-02', '01-03', '01-04', '01-05', '01-06', '01-07'];
-
-	    this.setState({
-	      dailyPoints: newPoints,
-	      dailyDates: newDates,
-	      cumulativePoints: newCumulativePoints,
-	      cumulativeDates: newCumulativeDates
+	    this.loadData();
+	  },
+	  loadData: function loadData() {
+	    $.ajax('/api/data').done(function (data) {
+	      this.setState({
+	        dateLabels: data.dateLabels,
+	        dailyData: data.dailyData,
+	        cumulativeData: data.cumulativeData
+	      });
+	    }.bind(this));
+	  },
+	  addOne: function addOne() {
+	    var entry = {
+	      'date': new Date()
+	    };
+	    $.ajax({
+	      type: 'POST',
+	      url: '/api/add',
+	      contentType: 'application/json',
+	      data: JSON.stringify(entry),
+	      success: function (data) {
+	        this.loadData();
+	      }.bind(this),
+	      error: function error(xhr, status, err) {
+	        console.log("Error adding entry: ", err);
+	      }
 	    });
 	  },
 	  render: function render() {
@@ -21470,6 +21485,7 @@
 	      display: 'flex',
 	      flexFlow: 'column',
 	      height: '100%',
+	      width: '100%',
 	      paddingLeft: 0,
 	      paddingRight: 0
 	    };
@@ -21479,10 +21495,9 @@
 	      { style: mainContainer },
 	      React.createElement(NavbarInstance, null),
 	      React.createElement(ChartContainer, {
-	        dailyPoints: this.state.dailyPoints,
-	        dailyDates: this.state.dailyDates,
-	        cumulativePoints: this.state.cumulativePoints,
-	        cumulativeDates: this.state.cumulativeDates
+	        dateLabels: this.state.dateLabels,
+	        dailyData: this.state.dailyData,
+	        cumulativeData: this.state.cumulativeData
 	      }),
 	      React.createElement(ButtonContainer, null)
 	    );
@@ -24072,8 +24087,8 @@
 	          style: chartFormat.chartStyle,
 	          axis: chartFormat.axis,
 	          legend: chartFormat.legend,
-	          points: this.props.dailyPoints,
-	          dates: this.props.dailyDates,
+	          data: this.props.dailyData,
+	          dates: this.props.dateLabels,
 	          formatInputs: this.formatDataInput
 	        }),
 	        React.createElement('div', { style: divider }),
@@ -24082,8 +24097,8 @@
 	          style: chartFormat.chartStyle,
 	          axis: chartFormat.axis,
 	          legend: chartFormat.legend,
-	          points: this.props.cumulativePoints,
-	          dates: this.props.cumulativeDates,
+	          data: this.props.cumulativeData,
+	          dates: this.props.dateLabels,
 	          formatInputs: this.formatDataInput
 	        })
 	      )
@@ -24106,8 +24121,6 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var React = __webpack_require__(2);
-	var update = __webpack_require__(276);
-	var $ = __webpack_require__(278);
 
 
 	var ChartInstance = React.createClass({
@@ -24122,7 +24135,7 @@
 	  },
 	  formatData: function formatData() {
 	    var dates = this.props.dates;
-	    var points = this.props.points;
+	    var points = this.props.data;
 	    return this.props.formatInputs(dates, points);
 	  },
 	  formatTitle: function formatTitle() {},
