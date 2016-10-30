@@ -23976,7 +23976,6 @@
 	var React = __webpack_require__(2);
 	var Row = __webpack_require__(269);
 	var Col = __webpack_require__(270);
-	var $ = __webpack_require__(272);
 	var DailyChart = __webpack_require__(273);
 	var CumulativeChart = __webpack_require__(279);
 
