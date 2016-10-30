@@ -1,7 +1,6 @@
 var React = require('react');
 var Row = require('react-bootstrap/lib/Row');
 var Col = require('react-bootstrap/lib/Col');
-var $ = require('jquery');
 var DailyChart = require('./DailyChart');
 var CumulativeChart = require('./CumulativeChart');
 
