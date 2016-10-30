@@ -27,7 +27,7 @@ var NavbarInstance = React.createClass({
 
     return (
       <div style={this.state.navbar} onClick={this.handleClick}>
-          Counter 9000
+          Counter 9000!
       </div>
     )
   },
