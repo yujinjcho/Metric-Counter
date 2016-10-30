@@ -1,5 +1,6 @@
 var React = require('react');
 var update = require('react-addons-update');
+var $ = require('jquery');
 import C3Chart from 'react-c3js';
 
 
@@ -21,13 +22,11 @@ var CumulativeChart = React.createClass({
     }
   },
   componentDidMount: function() {
-    var cols = [
-      ['x', '01-01', '01-02', '01-03', '01-04', '01-05', '01-06', '01-07'],
-      ['daily', 2, 4, 7, 10, 14, 19, 24]
-    ];
-    this.setState({
-      chartData: update(this.state.chartData, {columns: {$set: cols}})
-    });
+    $.ajax('/api/cumulative').done(function(data){
+      this.setState({
+        chartData: update(this.state.chartData, {columns: {$set: data}})
+      });
+    }.bind(this));
   },
   render: function() {
     return (
