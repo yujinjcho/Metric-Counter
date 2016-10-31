@@ -21465,7 +21465,7 @@
 	  },
 	  addOne: function addOne() {
 	    var entry = {
-	      'date': new Date()
+	      'user': '1'
 	    };
 	    $.ajax({
 	      type: 'POST',
@@ -21499,7 +21499,7 @@
 	        dailyData: this.state.dailyData,
 	        cumulativeData: this.state.cumulativeData
 	      }),
-	      React.createElement(ButtonContainer, null)
+	      React.createElement(ButtonContainer, { addOne: this.addOne })
 	    );
 	  }
 	});
@@ -52483,6 +52483,7 @@
 	    setTimeout(function () {
 	      this.changeButtonStyle(0.8);
 	    }.bind(this), 155);
+	    this.props.addOne();
 	  },
 	  changeButtonStyle: function changeButtonStyle(opacityLevel) {
 	    this.setState({
