@@ -30,7 +30,7 @@ var Main = React.createClass({
   },
   addOne: function() {
     var entry = {
-      'date': new Date()
+      'user': '1'
     };
     $.ajax({
       type: 'POST',
@@ -63,7 +63,7 @@ var Main = React.createClass({
           dailyData={this.state.dailyData}
           cumulativeData={this.state.cumulativeData}
         />
-        <ButtonContainer />
+        <ButtonContainer addOne={this.addOne}/>
       </Grid>
     )
   }

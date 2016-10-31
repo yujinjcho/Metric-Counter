@@ -10,11 +10,25 @@ var db;
 app.use(express.static('dist'));
 
 app.get('/api/data', function(req, res) {
+  console.log('Retrieving data');
   getData(res);
 });
 
+app.use(bodyParser.json());
+app.post('/api/add', function(req, res) {
+  var newEntry = {
+    'date': new Date()
+  }
+
+  db.collection(Config.MONGO_COLLECTION).insertOne(newEntry, function(err, doc) {
+    assert.equal(null, err);
+    console.log('Entry has been added');
+    res.json(doc);
+  });
+});
+
 function getData(res) {
-  var start = new Date(moment().subtract(6, 'days').format('YYYY/MM/DD'));
+  var start = new Date(moment().subtract(6, 'days').startOf('day').toISOString());
   getDailyandTotalData(start, res);
 };
 
@@ -71,7 +85,10 @@ function getDatesLabelInput() {
   var dates = ['x'];
 
   for (i = 0; i < 6; i++) {
-    var label = moment().subtract(i, 'days').format('MM-DD');
+    var dateObj = new Date(moment().subtract(i, 'days').toISOString());
+    var month = dateObj.getMonth() + 1;
+    var date = dateObj.getDate() + 1;
+    var label =  month.toString() + '-' + date.toString();
     dates.splice(1, 0, label);
   };
 
@@ -82,18 +99,19 @@ function formatDailyInput(agg, datesInput) {
   var counts = ['daily'];
   var dataDict = formatAggregation(agg);
 
-  for (i = 1; i < 7; i++) {
+  for (i = 1; i < datesInput.length; i++) {
     if (datesInput[i] in dataDict) {
-      counts.splice(1, 0, dataDict[datesInput[i]]);
+      counts.push(dataDict[datesInput[i]]);
     } else {
-      counts.splice(1, 0, 0);
+      counts.push(0);
     }
   };
+  console.log(datesInput);
+  console.log(counts);
   return counts;
 };
 
 function formatCumulativeInput(daily, remaining) {
-  console.log(remaining);
   var remainingCount = remaining[0].count;
   var countsCopy = daily.slice();
 
@@ -120,7 +138,6 @@ function formatAggregation(agg) {
       '-' + agg[i]._id.day.toString();
     data[monthDay] = agg[i].count;
   };
-
   return data;
 };
 
