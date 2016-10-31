@@ -38,6 +38,7 @@ var ButtonContainer = React.createClass({
   handleClick: function() {
     this.changeButtonStyle(0.5);
     setTimeout(function(){ this.changeButtonStyle(0.8) }.bind(this), 155);
+    this.props.addOne();
   },
   changeButtonStyle: function(opacityLevel) {
     this.setState({
