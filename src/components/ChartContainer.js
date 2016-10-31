@@ -6,6 +6,7 @@ var ChartInstance = require('./ChartInstance');
 
 var ChartContainer = React.createClass({
   formatDataInput: function(dates, points) {
+    // don't need intermediate variable assignment
     var chartData = {
       x: 'x',
       xFormat: '%m-%d',
@@ -18,6 +19,7 @@ var ChartContainer = React.createClass({
     return chartData;
   },
   render: function() {
+    // why not define these in stylesheets?
     var chartRow = {
       flex: 2,
       overflow: 'visible'

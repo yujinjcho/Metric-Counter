@@ -16,11 +16,14 @@ var Main = React.createClass({
       cumulativeData: []
     }
   },
+  // i would put newlines between functions
   componentDidMount: function() {
     this.loadData();
   },
   loadData: function() {
     $.ajax('/api/data').done(function(data){
+      // since the data object is the same shape as the required state,
+      // i think can just do: this.setState(data);
       this.setState({
         dateLabels: data.dateLabels,
         dailyData: data.dailyData,
@@ -37,6 +40,9 @@ var Main = React.createClass({
       url: '/api/add',
       contentType: 'application/json',
       data: JSON.stringify(entry),
+      // what does the endpoint return (what's 'data')?
+      // if it's the same as the GET endpoint, can just directly set state
+      // instead of making another call
       success: function(data) {
         this.loadData();
       }.bind(this),
@@ -46,6 +52,7 @@ var Main = React.createClass({
     });
   },
   render: function() {
+    // arguably better to define styles in stylesheet and not inline
     var mainContainer = {
       display: 'flex',
       flexFlow: 'column',
@@ -58,6 +65,8 @@ var Main = React.createClass({
     return (
       <Grid style={mainContainer}>
         <NavbarInstance />
+        // i think you can do this to pass the entire state down:
+        // <ChartContainer {...this.state} />
         <ChartContainer
           dateLabels={this.state.dateLabels}
           dailyData={this.state.dailyData}
