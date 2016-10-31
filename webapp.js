@@ -16,6 +16,7 @@ app.get('/api/data', function(req, res) {
 app.use(bodyParser.json());
 app.post('/api/add', function(req, res) {
   var newEntry = {
+    // don't need quotes for key
     'date': new Date()
   }
 
@@ -26,6 +27,8 @@ app.post('/api/add', function(req, res) {
   });
 });
 
+// i think better to not prefix function names with 'get'
+// name should already be descriptive of what gets returned
 function getData(res) {
   var start = new Date(moment().subtract(6, 'days').startOf('day').toISOString());
   getDailyandTotalData(start, res);
@@ -74,6 +77,7 @@ function formatData(remaining, lastSevenDays) {
   var dailyData = formatDailyInput(lastSevenDays, dateLabels);
   var cumulativeData = formatCumulativeInput(dailyData, remaining);
   return {
+    // don't need quotes for keys
     'dateLabels': dateLabels,
     'dailyData': dailyData,
     'cumulativeData': cumulativeData
@@ -87,7 +91,16 @@ function getDatesLabelInput() {
     var dateObj = new Date(moment().subtract(i, 'days').toISOString());
     var month = dateObj.getMonth() + 1;
     var date = dateObj.getDate() + 1;
+    // i don't think you need to call toString()
     var label =  month.toString() + '-' + date.toString();
+    // is this just prepending each label to the dates array? kinda confusing using splice
+    // could do something like this to be more intuitive:
+    // var dates = [];
+    // for (...) {
+    //   ...
+    //   dates.unshift(label);
+    // }
+    // return ['x'].concat(dates);
     dates.splice(1, 0, label);
   };
 
@@ -99,6 +112,18 @@ function formatDailyInput(agg, datesInput) {
   var dataDict = formatAggregation(agg);
 
   for (i = 1; i < datesInput.length; i++) {
+    // this if-else can be simplified to:
+    // counts.push(dataDict[datesInput[i]] || 0);
+    //
+    // also, some semi-related thoughts:
+    // i think it's generally better practice to use the array functions (map, reduce, etc.)
+    // than for loops in js since they give you direct access to the iterated element.
+    // arguable whether always more readable.. but this function could be:
+    //
+    // var dataDict = formatAggregation(agg);
+    // return ['daily'].concat(datesInput.splice(1).map(function(date) {
+    //   return dataDict[date] || 0;
+    // });
     if (datesInput[i] in dataDict) {
       counts.push(dataDict[datesInput[i]]);
     } else {
@@ -116,6 +141,11 @@ function formatCumulativeInput(daily, remaining) {
     countsCopy[i] = countsCopy[i] + countsCopy[i - 1];
   };
 
+  // could skip assigning to this intermediate variable since you're just returning immediately after
+  //
+  // return countsCopy.map(function(item) {
+  //   return item === 'daily' ? 'daily' : item + remainingCount;
+  // });
   var cumulativeCounts = countsCopy.map(function(item) {
     if (item === 'daily') {
       return 'daily';
