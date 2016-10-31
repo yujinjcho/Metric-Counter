@@ -10,7 +10,6 @@ var db;
 app.use(express.static('dist'));
 
 app.get('/api/data', function(req, res) {
-  console.log('Retrieving data');
   getData(res);
 });
 
@@ -106,8 +105,6 @@ function formatDailyInput(agg, datesInput) {
       counts.push(0);
     }
   };
-  console.log(datesInput);
-  console.log(counts);
   return counts;
 };
 
