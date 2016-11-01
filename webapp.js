@@ -18,18 +18,19 @@ app.post('/api/add', function(req, res) {
   var timeStamp = new Date();
   var newEntry = {
     date: timeStamp,
-    monthDay: (timeStamp.getMonth()+1) + '-' + timeStamp.getDate()
-  }
+    monthDay: (timeStamp.getMonth() + 1) + '-' + timeStamp.getDate()
+  };
 
-  db.collection(Config.MONGO_COLLECTION).insertOne(newEntry, function(err, doc) {
+  db.collection(Config.MONGO_COLLECTION).insert(newEntry, function(err, doc) {
     assert.equal(null, err);
     console.log('Entry has been added');
-    res.json(doc);
+    chartData(res);
   });
 });
 
 function chartData(res) {
-  var start = new Date(moment().subtract(6, 'days').startOf('day').toISOString());
+  var start = new Date(moment().subtract(6, 'days')
+    .startOf('day').toISOString());
   getDailyandTotalData(start, res);
 };
 
@@ -96,17 +97,15 @@ function getDatesLabelInput() {
 
 function formatDailyInput(aggregatedDailyData, datesInput) {
   var dataDict = aggregatedDailyData.reduce(
-    function(d,item) {
+    function(d, item) {
       d[item._id] = item.count;
-      return d
+      return d;
     }, {}
   );
 
-  console.log(dataDict);
-
   return ['daily'].concat(datesInput.slice(1).map(function(date) {
     return dataDict[date] || 0;
-  }))
+  }));
 };
 
 function formatCumulativeInput(daily, remaining) {
