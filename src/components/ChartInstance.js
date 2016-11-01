@@ -3,17 +3,17 @@ import C3Chart from 'react-c3js';
 
 
 var ChartInstance = React.createClass({
-  getInitialState: function() {
-    return {
-      title: {
-        text: this.props.title
-      }
-    }
-  },
   formatData: function() {
-    var dates = this.props.dates;
-    var points = this.props.data;
-    return this.props.formatInputs(dates, points);
+    var chartData = {
+      x: 'x',
+      xFormat: '%m-%d',
+      columns: [this.props.dates, this.props.data],
+      types: {
+        daily: 'bar'
+      },
+      labels:true
+    };
+    return chartData;
   },
   formatTitle: function() {
 
@@ -22,7 +22,7 @@ var ChartInstance = React.createClass({
     return (
       <C3Chart
         style={this.props.style}
-        title={this.state.title}
+        title={ { text: this.props.title } }
         data={this.formatData()}
         legend={this.props.legend}
         axis={this.props.axis}
