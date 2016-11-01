@@ -10,13 +10,15 @@ var db;
 app.use(express.static('dist'));
 
 app.get('/api/data', function(req, res) {
-  getData(res);
+  chartData(res);
 });
 
 app.use(bodyParser.json());
 app.post('/api/add', function(req, res) {
+  var timeStamp = new Date();
   var newEntry = {
-    'date': new Date()
+    date: timeStamp,
+    monthDay: (timeStamp.getMonth()+1) + '-' + timeStamp.getDate()
   }
 
   db.collection(Config.MONGO_COLLECTION).insertOne(newEntry, function(err, doc) {
@@ -26,7 +28,7 @@ app.post('/api/add', function(req, res) {
   });
 });
 
-function getData(res) {
+function chartData(res) {
   var start = new Date(moment().subtract(6, 'days').startOf('day').toISOString());
   getDailyandTotalData(start, res);
 };
@@ -39,10 +41,7 @@ function getDailyandTotalData(date, res) {
       }
     }},
     {$group: {
-      _id: {
-        month: {$month: '$date'},
-        day: {$dayOfMonth: '$date'}
-      },
+      _id: '$monthDay',
       count: {$sum: 1}
     }}
   ], function(err, data) {
@@ -74,42 +73,44 @@ function formatData(remaining, lastSevenDays) {
   var dailyData = formatDailyInput(lastSevenDays, dateLabels);
   var cumulativeData = formatCumulativeInput(dailyData, remaining);
   return {
-    'dateLabels': dateLabels,
-    'dailyData': dailyData,
-    'cumulativeData': cumulativeData
+    dateLabels: dateLabels,
+    dailyData: dailyData,
+    cumulativeData: cumulativeData
   };
 };
 
 function getDatesLabelInput() {
-  var dates = ['x'];
+  var dates = [];
+  var dateObj = new Date();
 
   for (i = 0; i < 6; i++) {
-    var dateObj = new Date(moment().subtract(i, 'days').toISOString());
     var month = dateObj.getMonth() + 1;
-    var date = dateObj.getDate() + 1;
-    var label =  month.toString() + '-' + date.toString();
-    dates.splice(1, 0, label);
+    var date = dateObj.getDate() ;
+    var label =  month + '-' + date;
+    dates.unshift(label);
+    dateObj.setDate(dateObj.getDate() - 1);
   };
 
-  return dates;
+  return ['x'].concat(dates);
 };
 
-function formatDailyInput(agg, datesInput) {
-  var counts = ['daily'];
-  var dataDict = formatAggregation(agg);
+function formatDailyInput(aggregatedDailyData, datesInput) {
+  var dataDict = aggregatedDailyData.reduce(
+    function(d,item) {
+      d[item._id] = item.count;
+      return d
+    }, {}
+  );
 
-  for (i = 1; i < datesInput.length; i++) {
-    if (datesInput[i] in dataDict) {
-      counts.push(dataDict[datesInput[i]]);
-    } else {
-      counts.push(0);
-    }
-  };
-  return counts;
+  console.log(dataDict);
+
+  return ['daily'].concat(datesInput.slice(1).map(function(date) {
+    return dataDict[date] || 0;
+  }))
 };
 
 function formatCumulativeInput(daily, remaining) {
-  var remainingCount = remaining[0].count;
+  var remainingCount = remaining[0] ? remaining[0].count : 0;
   var countsCopy = daily.slice();
 
   for (var i = 2; i < countsCopy.length; i++) {
@@ -125,17 +126,6 @@ function formatCumulativeInput(daily, remaining) {
   });
 
   return cumulativeCounts;
-};
-
-function formatAggregation(agg) {
-  var data = {};
-
-  for (var i = 0; i < agg.length; i++) {
-    var monthDay = agg[i]._id.month.toString() +
-      '-' + agg[i]._id.day.toString();
-    data[monthDay] = agg[i].count;
-  };
-  return data;
 };
 
 MongoClient.connect(Config.MONGO_DEV, function(err, dbConnection) {
