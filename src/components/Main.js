@@ -7,27 +7,25 @@ var ChartContainer = require('./ChartContainer');
 var ButtonContainer = require('./ButtonContainer');
 var NavbarInstance = require('./NavbarInstance');
 
-
 var Main = React.createClass({
   getInitialState: function() {
     return {
       dateLabels: [],
       dailyData: [],
       cumulativeData: []
-    }
+    };
   },
+
   componentDidMount: function() {
     this.loadData();
   },
+
   loadData: function() {
-    $.ajax('/api/data').done(function(data){
-      this.setState({
-        dateLabels: data.dateLabels,
-        dailyData: data.dailyData,
-        cumulativeData: data.cumulativeData
-      });
+    $.ajax('/api/data').done(function(data) {
+      this.setState(data);
     }.bind(this));
   },
+
   addOne: function() {
     var entry = {
       'user': '1'
@@ -38,13 +36,14 @@ var Main = React.createClass({
       contentType: 'application/json',
       data: JSON.stringify(entry),
       success: function(data) {
-        this.loadData();
+        this.setState(data);
       }.bind(this),
       error: function(xhr, status, err) {
-        console.log("Error adding entry: ", err);
+        console.log('Error adding entry: ', err);
       }
     });
   },
+
   render: function() {
     var mainContainer = {
       display: 'flex',
@@ -58,14 +57,10 @@ var Main = React.createClass({
     return (
       <Grid style={mainContainer}>
         <NavbarInstance />
-        <ChartContainer
-          dateLabels={this.state.dateLabels}
-          dailyData={this.state.dailyData}
-          cumulativeData={this.state.cumulativeData}
-        />
+        <ChartContainer {...this.state} />
         <ButtonContainer addOne={this.addOne}/>
       </Grid>
-    )
+    );
   }
 });
 
