@@ -5,18 +5,6 @@ var ChartInstance = require('./ChartInstance');
 
 
 var ChartContainer = React.createClass({
-  formatDataInput: function(dates, points) {
-    var chartData = {
-      x: 'x',
-      xFormat: '%m-%d',
-      columns: [dates, points],
-      types: {
-        daily: 'bar'
-      },
-      labels:true
-    };
-    return chartData;
-  },
   render: function() {
     var chartRow = {
       flex: 2,
@@ -68,7 +56,6 @@ var ChartContainer = React.createClass({
               legend={chartFormat.legend}
               data={this.props.dailyData}
               dates={this.props.dateLabels}
-              formatInputs={this.formatDataInput}
             />
             <div style={divider}></div>
             <ChartInstance
@@ -78,7 +65,6 @@ var ChartContainer = React.createClass({
               legend={chartFormat.legend}
               data={this.props.cumulativeData}
               dates={this.props.dateLabels}
-              formatInputs={this.formatDataInput}
             />
         </Col>
       </Row>
