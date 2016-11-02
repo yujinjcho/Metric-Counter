@@ -20,6 +20,7 @@ var NavbarInstance = React.createClass({
       extend: false
     }
   },
+
   render: function() {
     var navbarInstance = {
       textAlign: 'center',
@@ -31,6 +32,7 @@ var NavbarInstance = React.createClass({
       </div>
     )
   },
+
   handleClick: function() {
     if (this.state.extend) {
       this.adjustHeight('50');
@@ -39,15 +41,16 @@ var NavbarInstance = React.createClass({
     };
     this.toggleExtend();
   },
+
   toggleExtend: function() {
     this.setState({extend: !this.state.extend});
   },
+
   adjustHeight: function(newHeight) {
     this.setState({
       navbar: update(this.state.navbar, {height: {$set: newHeight}})
     });
   }
 });
-
 
 module.exports = NavbarInstance;
