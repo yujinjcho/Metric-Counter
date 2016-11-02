@@ -1,8 +1,26 @@
 var React = require('react');
 import C3Chart from 'react-c3js';
 
+require('../../static/css/chart-instance.css');
 
 var ChartInstance = React.createClass({
+  getInitialState: function() {
+    return {
+      axis: {
+        x: {
+          type: 'timeseries',
+          localtime: false,
+          tick: {
+            format: '%m-%d'
+          }
+        }
+      },
+      legend: {
+        hide: true
+      }
+    };
+  },
+
   formatData: function() {
     var chartData = {
       x: 'x',
@@ -15,17 +33,18 @@ var ChartInstance = React.createClass({
     };
     return chartData;
   },
-  formatTitle: function() {
 
+  formatTitle: function() {
   },
+
   render: function() {
     return (
       <C3Chart
-        style={this.props.style}
+        className='chart-instance'
         title={ { text: this.props.title } }
         data={this.formatData()}
-        legend={this.props.legend}
-        axis={this.props.axis}
+        legend={this.state.legend}
+        axis={this.state.axis}
       />
     )
   }
