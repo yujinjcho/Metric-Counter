@@ -7,6 +7,8 @@ var ChartContainer = require('./ChartContainer');
 var ButtonContainer = require('./ButtonContainer');
 var NavbarInstance = require('./NavbarInstance');
 
+require('../../static/css/main.css');
+
 var Main = React.createClass({
   getInitialState: function() {
     return {
@@ -45,17 +47,9 @@ var Main = React.createClass({
   },
 
   render: function() {
-    var mainContainer = {
-      display: 'flex',
-      flexFlow: 'column',
-      height: '100%',
-      width: '100%',
-      paddingLeft: 0,
-      paddingRight: 0
-    };
 
     return (
-      <Grid style={mainContainer}>
+      <Grid className='main'>
         <NavbarInstance />
         <ChartContainer {...this.state} />
         <ButtonContainer addOne={this.addOne}/>
