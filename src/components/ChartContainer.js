@@ -3,6 +3,7 @@ var Row = require('react-bootstrap/lib/Row');
 var Col = require('react-bootstrap/lib/Col');
 var ChartInstance = require('./ChartInstance');
 
+require('../../static/css/chart-container.css');
 
 var ChartContainer = React.createClass({
   render: function() {
