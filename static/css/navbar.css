@@ -1,0 +1,42 @@
+.navbar {
+  height: 50px;
+  background: #001f3f;
+  font-size: 20px;
+  font-family: arial;
+  padding-top: 10px;
+  color: #DDDDDD;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  z-index: 10;
+  -webkit-transition: height .7s;
+  transition: height .7s;
+}
+
+.extend {
+  height: 100vh;
+}
+
+.caret-drop {
+  padding-top: 2px;
+  color: #CCCCCC;
+  -webkit-transition: transform .7s;
+  transition: transform .7s;
+}
+
+.caret-extend {
+  -ms-transform: rotate(180deg); /* IE 9 */
+  -webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */
+  transform: rotate(180deg);
+}
+
+.caret-container {
+  border: 1px solid #CCCCCC;
+  border-radius: 20%;
+  width: 27px;
+  height: 27px;
+  right: 10px;
+  top: 10px;
+  position: absolute;
+  text-align: center;
+}
