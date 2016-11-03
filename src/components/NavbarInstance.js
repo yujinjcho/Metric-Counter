@@ -19,7 +19,7 @@ var NavbarInstance = React.createClass({
 
     return (
       <div className={this.state.navbarName} >
-          Metric Counter
+          The Metric Counter
           <div className="caret-container" onClick={this.handleClick}>
             <i className={this.state.caretName}></i>
           </div>
