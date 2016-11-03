@@ -2,22 +2,13 @@ var React = require('react');
 var Col = require('react-bootstrap/lib/Col');
 var update = require('react-addons-update');
 
+require('../../static/css/navbar.css');
+
 var NavbarInstance = React.createClass({
   getInitialState: function() {
     return {
-      navbar: {
-        height: 50,
-        background: '#001f3f',
-        fontSize: 20,
-        fontFamily: 'arial',
-        paddingTop: 10,
-        color: '#DDDDDD',
-        position: 'absolute',
-        width: '100%',
-        textAlign: 'center',
-        zIndex: 10
-      },
-      extend: false
+      navbarName: 'navbar',
+      caretName : 'fa fa-caret-down caret-drop'
     }
   },
 
@@ -27,29 +18,23 @@ var NavbarInstance = React.createClass({
     };
 
     return (
-      <div style={this.state.navbar} onClick={this.handleClick}>
+      <div className={this.state.navbarName} >
           Counter 9000!
+          <div className="caret-container" onClick={this.handleClick}>
+            <i className={this.state.caretName}></i>
+          </div>
       </div>
     )
   },
 
   handleClick: function() {
-    if (this.state.extend) {
-      this.adjustHeight('50');
+    if (this.state.navbarName === 'navbar') {
+      this.setState({navbarName: 'navbar extend'});
+      this.setState({caretName: 'fa fa-caret-down caret-drop caret-extend'});
     } else {
-      this.adjustHeight('100vh');
+      this.setState({navbarName: 'navbar'});
+      this.setState({caretName: 'fa fa-caret-down caret-drop'});
     };
-    this.toggleExtend();
-  },
-
-  toggleExtend: function() {
-    this.setState({extend: !this.state.extend});
-  },
-
-  adjustHeight: function(newHeight) {
-    this.setState({
-      navbar: update(this.state.navbar, {height: {$set: newHeight}})
-    });
   }
 });
 
