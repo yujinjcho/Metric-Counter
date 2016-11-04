@@ -12,6 +12,35 @@
     display: none;
 }
 
+.account-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 40px auto 0 auto;
+    padding-left: 5px;
+    padding-right: 5px;
+    opacity: 1;
+    -webkit-transition: all 400ms ease 400ms;
+    -moz-transition: all 400ms ease 400ms;
+    -o-transition: all 400ms ease 400ms;
+    -ms-transition: all 400ms ease 400ms;
+    transition: all 400ms ease 400ms;
+}
+
+
+.navbar-buttons {
+    border: 1px solid #DDDDDD;
+    width: 100%;
+    height: 80px;
+    padding-top: 18px;
+    margin-bottom: 10px;
+    font-size: 30px;
+}
+
+.navbar-buttons:hover {
+    background: rgba(244, 244, 244, 0.2);
+}
+
 .login {
     border: 1px solid #DDDDDD;
     width: 95%;
@@ -19,6 +48,16 @@
     padding-top: 20px;
     font-size: 40px;
     margin: 0 auto;
+    opacity: 1;
+    -webkit-transition: all 400ms ease 400ms;
+    -moz-transition: all 400ms ease 400ms;
+    -o-transition: all 400ms ease 400ms;
+    -ms-transition: all 400ms ease 400ms;
+    transition: all 400ms ease 400ms;
+}
+
+.login-hidden, .account-container-hidden {
+    opacity: 0;
 }
 
 .login:hover {

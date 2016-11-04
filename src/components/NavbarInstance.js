@@ -14,7 +14,9 @@ var NavbarInstance = React.createClass({
     return {
       navbarName: 'navbar',
       caretName: 'fa fa-caret-down caret-drop',
-      navbarOptionsName: 'navbar-options-hidden'
+      navbarOptionsName: 'navbar-options-hidden',
+      loginName: 'login login-hidden',
+      accountName: 'account-container account-container-hidden'
     }
   },
 
@@ -31,6 +33,8 @@ var NavbarInstance = React.createClass({
           </div>
           <NavbarOptions
             options={this.state.navbarOptionsName}
+            loginName = {this.state.loginName}
+            accountName = {this.state.accountName}
           />
       </div>
     )
@@ -46,11 +50,19 @@ var NavbarInstance = React.createClass({
     this.setState({navbarName: 'navbar extend'});
     this.setState({caretName: 'fa fa-caret-down caret-drop caret-extend'});
     this.setState({navbarOptionsName: 'navbar-options'});
+    setTimeout(function(){
+      this.setState({
+        loginName: 'login',
+        accountName: 'account-container'
+      });
+    }.bind(this), 100);
   },
   collapseNavbar: function() {
     this.setState({navbarName: 'navbar'});
     this.setState({caretName: 'fa fa-caret-down caret-drop'});
     this.setState({navbarOptionsName: 'navbar-options-hidden'});
+    this.setState({loginName: 'login login-hidden'});
+    this.setState({accountName: 'account-container account-container-hidden'});
   }
 });
 
