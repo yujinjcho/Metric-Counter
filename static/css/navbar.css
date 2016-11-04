@@ -39,4 +39,5 @@
   top: 10px;
   position: absolute;
   text-align: center;
+  z-index: 20;
 }

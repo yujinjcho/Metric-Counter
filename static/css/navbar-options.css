@@ -1,12 +1,26 @@
 .navbar-options {
-    border: 1px solid white;
     position: absolute;
-    top: 50px;
+    top: 0px;
     right: 0px;
     left: 0px;
     bottom: 0px;
+    display: flex;
+    align-items: center;
 }
 
 .navbar-options-hidden {
     display: none;
+}
+
+.login {
+    border: 1px solid #DDDDDD;
+    width: 95%;
+    height: 100px;
+    padding-top: 20px;
+    font-size: 40px;
+    margin: 0 auto;
+}
+
+.login:hover {
+    background: rgba(244, 244, 244, 0.2);
 }

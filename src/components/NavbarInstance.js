@@ -13,8 +13,8 @@ var NavbarInstance = React.createClass({
   getInitialState: function() {
     return {
       navbarName: 'navbar',
-      caretName : 'fa fa-caret-down caret-drop',
-      navbarOptionsName : 'navbar-options-hidden'
+      caretName: 'fa fa-caret-down caret-drop',
+      navbarOptionsName: 'navbar-options-hidden'
     }
   },
 
@@ -29,7 +29,9 @@ var NavbarInstance = React.createClass({
           <div className="caret-container" onClick={this.handleClick}>
             <i className={this.state.caretName}></i>
           </div>
-          <NavbarOptions options={this.state.navbarOptionsName}/>
+          <NavbarOptions
+            options={this.state.navbarOptionsName}
+          />
       </div>
     )
   },
@@ -37,7 +39,7 @@ var NavbarInstance = React.createClass({
     if (this.state.navbarName === 'navbar') {
       this.extendNavbar();
     } else {
-      this.collaposeNavbar();
+      this.collapseNavbar();
     };
   },
   extendNavbar: function() {
@@ -45,7 +47,7 @@ var NavbarInstance = React.createClass({
     this.setState({caretName: 'fa fa-caret-down caret-drop caret-extend'});
     this.setState({navbarOptionsName: 'navbar-options'});
   },
-  collaposeNavbar: function() {
+  collapseNavbar: function() {
     this.setState({navbarName: 'navbar'});
     this.setState({caretName: 'fa fa-caret-down caret-drop'});
     this.setState({navbarOptionsName: 'navbar-options-hidden'});
