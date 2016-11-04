@@ -1,0 +1,12 @@
+.navbar-options {
+    border: 1px solid white;
+    position: absolute;
+    top: 50px;
+    right: 0px;
+    left: 0px;
+    bottom: 0px;
+}
+
+.navbar-options-hidden {
+    display: none;
+}
