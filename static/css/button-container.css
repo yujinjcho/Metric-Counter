@@ -1,0 +1,23 @@
+.button-style {
+  width: 90%;
+  background-color: #0074D9;
+  height: 50px;
+  font-size: 20px;
+  border: none;
+  color: white;
+  opacity: 0.8;
+  box-shadow :0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  font-family: Arial;
+  z-index: 5;
+}
+
+.button-clicked {
+  opacity: 0.5;
+  margin-top: 3px;
+}
+
+.button-row {
+  background: white;
+  height: 60px;
+  text-align: center;
+}
