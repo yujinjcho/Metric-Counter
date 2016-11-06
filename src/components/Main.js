@@ -103,7 +103,7 @@ var Main = React.createClass({
         <NavbarInstance
           user={this.state.user}
           categories={this.state.categories}
-          title={this.state.activeCategory}
+          activeCategory={this.state.activeCategory}
           change={this.changeCategory}
         />
         <ChartContainer {...this.state} />

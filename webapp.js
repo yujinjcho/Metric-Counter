@@ -57,6 +57,18 @@ app.get('/api/categories', function(req, res) {
   };
 });
 
+app.delete('/api/categories', function(req, res) {
+  if (req.user !== undefined ) {
+    var test = {'test':'loggedin'}
+    console.log('delete');
+    res.json(test);
+  } else {
+    var test = {'test':'notloggedin'}
+    console.log('delete');
+    res.json(test);
+  };
+})
+
 app.post('/api/add', function(req, res) {
   var timeStamp = new Date();
   var newEntry = {

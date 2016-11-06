@@ -15,6 +15,7 @@ var NavbarOptions = React.createClass({
           categories = {this.props.categories}
           change = {this.props.change}
           collapse = {this.props.collapse}
+          activeCategory = {this.props.activeCategory}
         />
       </div>
     )
