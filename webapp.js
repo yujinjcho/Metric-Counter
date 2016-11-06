@@ -40,8 +40,12 @@ app.use(express.static('dist'));
 
 
 app.get('/api/data', function(req, res) {
-  console.log(req.user);
-  chartData(res);
+  var start = startDate();
+  if (req.user === undefined) {
+    guestData(res, start);
+  } else {
+    chartData(res, start, req.user.id);
+  }
 });
 
 app.use(bodyParser.json());
@@ -49,39 +53,61 @@ app.post('/api/add', function(req, res) {
   var timeStamp = new Date();
   var newEntry = {
     date: timeStamp,
-    monthDay: (timeStamp.getMonth() + 1) + '-' + timeStamp.getDate()
+    monthDay: (timeStamp.getMonth() + 1) + '-' + timeStamp.getDate(),
+    userId: req.body.userId
   };
 
   db.collection(config.mongoCollection).insert(newEntry, function(err, doc) {
     assert.equal(null, err);
     console.log('Entry has been added');
-    chartData(res);
+    chartData(res, startDate(), req.body.userId);
   });
 });
 
 app.get('/login', passport.authenticate('facebook'));
 
+app.get('/logout', function(req, res) {
+  req.session.destroy(function(err) {
+    res.redirect('/');
+  })
+})
+
 app.get(
   '/login/return',
   passport.authenticate('facebook', { session: true, failureRedirect: '/' }),
   function(req, res) {
-    console.log(req.user);
     res.redirect('/');
   }
 );
 
-function chartData(res) {
-  var start = new Date(moment().subtract(6, 'days')
+function startDate() {
+  return new Date(moment().subtract(6, 'days')
     .startOf('day').toISOString());
-  getDailyandTotalData(start, res);
 };
 
-function getDailyandTotalData(date, res) {
+function chartData(res, start, userId) {
+  getDailyandTotalData(start, res, userId);
+};
+
+function guestData(res, start) {
+  var dateLabels = getDatesLabelInput();
+  var dailyData = ['daily', 0, 0, 0, 0, 0, 0];
+  var cumulativeData = ['daily', 0, 0, 0, 0, 0, 0];
+  res.json({
+    dateLabels: dateLabels,
+    dailyData: dailyData,
+    cumulativeData: cumulativeData,
+    user: null
+  });
+};
+
+function getDailyandTotalData(date, res, userId) {
   db.collection(config.mongoCollection).aggregate([
     {$match: {
-      'date': {
-        $gte: date,
-      }
+      $and: [
+        {'date': {$gte: date}},
+        {'userId': userId}
+      ]
     }},
     {$group: {
       _id: '$monthDay',
@@ -89,16 +115,17 @@ function getDailyandTotalData(date, res) {
     }}
   ], function(err, data) {
     assert.equal(null, err);
-    getTotalBefore(date, data, res);
+    getTotalBefore(date, data, res, userId);
   });
 };
 
-function getTotalBefore(date, dailyData, res) {
+function getTotalBefore(date, dailyData, res, userId) {
   db.collection(config.mongoCollection).aggregate([
     {$match: {
-      'date': {
-        $lt: date,
-      }
+      $and: [
+        {'date': {$lt: date}},
+        {'userId': userId}
+      ]
     }},
     {$group: {
       _id: null,
@@ -106,19 +133,20 @@ function getTotalBefore(date, dailyData, res) {
     }}
   ], function(err, data) {
     assert.equal(null, err);
-    var result = formatData(data, dailyData);
+    var result = formatData(data, dailyData, userId);
     res.json(result);
   });
 };
 
-function formatData(remaining, lastSevenDays) {
+function formatData(remaining, lastSevenDays, userId) {
   var dateLabels = getDatesLabelInput();
   var dailyData = formatDailyInput(lastSevenDays, dateLabels);
   var cumulativeData = formatCumulativeInput(dailyData, remaining);
   return {
     dateLabels: dateLabels,
     dailyData: dailyData,
-    cumulativeData: cumulativeData
+    cumulativeData: cumulativeData,
+    user: userId
   };
 };
 

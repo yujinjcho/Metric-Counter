@@ -14,7 +14,8 @@ var Main = React.createClass({
     return {
       dateLabels: [],
       dailyData: [],
-      cumulativeData: []
+      cumulativeData: [],
+      user: null
     };
   },
 
@@ -29,21 +30,25 @@ var Main = React.createClass({
   },
 
   addOne: function() {
-    var entry = {
-      'user': '1'
+    if (this.state.user !== null) {
+      var entry = {
+        'userId': this.state.user
+      };
+      $.ajax({
+        type: 'POST',
+        url: '/api/add',
+        contentType: 'application/json',
+        data: JSON.stringify(entry),
+        success: function(data) {
+          this.setState(data);
+        }.bind(this),
+        error: function(xhr, status, err) {
+          console.log('Error adding entry: ', err);
+        }
+      });
+    } else {
+      alert('add one');
     };
-    $.ajax({
-      type: 'POST',
-      url: '/api/add',
-      contentType: 'application/json',
-      data: JSON.stringify(entry),
-      success: function(data) {
-        this.setState(data);
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.log('Error adding entry: ', err);
-      }
-    });
   },
 
   render: function() {
