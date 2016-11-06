@@ -14,7 +14,7 @@ passport.use(
   new Strategy({
     clientID: config.fbAppId,
     clientSecret: config.fbSecret,
-    callbackURL: 'http://localhost:3000/login/return'},
+    callbackURL: '/login/return'},
     function(accessToken, refreshToken, profile, cb) {
       return cb(null, profile);
     }
@@ -44,37 +44,32 @@ app.get('/api/data', function(req, res) {
   if (req.user === undefined) {
     guestData(res, start);
   } else {
-    chartData(res, start, req.user.id);
+    getDailyandTotalData(start, res, req.user.id, req.query.category);
   }
 });
 
 app.get('/api/categories', function(req, res) {
-  db.collection(config.mongoCategories).aggregate([
-    {$match: {
-      'userId': req.user.id
-    }},
-    {$group: {
-      _id: '$category'
-    }}
-  ], function(err, data) {
-    assert.equal(null, err);
-    res.json(data);
-    //latestEntry(req, res, data);
-  });
-})
+  if (req.user === undefined) {
+    var defaultCategory = [{_id: 'General', recent: new Date()}];
+    res.json(defaultCategory);
+  } else {
+    activeCategories(req, res);
+  };
+});
 
 app.post('/api/add', function(req, res) {
   var timeStamp = new Date();
   var newEntry = {
     date: timeStamp,
     monthDay: (timeStamp.getMonth() + 1) + '-' + timeStamp.getDate(),
-    userId: req.body.userId
+    userId: req.body.userId,
+    category: req.body.category
   };
 
   db.collection(config.mongoCollection).insert(newEntry, function(err, doc) {
     assert.equal(null, err);
     console.log('Entry has been added');
-    chartData(res, startDate(), req.body.userId);
+    getDailyandTotalData(startDate(), res, req.body.userId, req.body.category);
   });
 });
 
@@ -94,17 +89,19 @@ app.get(
   }
 );
 
-/*
-function latestEntry(req, res, categories) {
-  db.collection(config.mongoCollection).find({'userId': req.user.id}, function(err, doc) {
-    var lastCategory = (doc === undefined) ? 'General' : doc.category
-    console.log(doc);
-    res.json({
-
-    })
-  }).sort({date: -1}).limit(1);
-};
-*/
+function activeCategories(req, res) {
+  db.collection(config.mongoCollection).aggregate([
+    {$match: {'userId': req.user.id}},
+    {$sort: {date:1}},
+    {$group: {
+      _id: '$category',
+      recent: {$last: '$date'}
+    }}
+  ], function(err, data) {
+    assert.equal(null, err);
+    res.json(data);
+  });
+}
 
 function handleUser(user, res) {
   db.collection(config.mongoUsers).findOne({'userId': user.id}, function(err, doc) {
@@ -144,8 +141,8 @@ function startDate() {
     .startOf('day').toISOString());
 };
 
-function chartData(res, start, userId) {
-  getDailyandTotalData(start, res, userId);
+function chartData(res, start, userId, category) {
+
 };
 
 function guestData(res, start) {
@@ -160,12 +157,13 @@ function guestData(res, start) {
   });
 };
 
-function getDailyandTotalData(date, res, userId) {
+function getDailyandTotalData(date, res, userId, category) {
   db.collection(config.mongoCollection).aggregate([
     {$match: {
       $and: [
         {'date': {$gte: date}},
-        {'userId': userId}
+        {'userId': userId},
+        {'category': category}
       ]
     }},
     {$group: {
@@ -174,16 +172,17 @@ function getDailyandTotalData(date, res, userId) {
     }}
   ], function(err, data) {
     assert.equal(null, err);
-    getTotalBefore(date, data, res, userId);
+    getTotalBefore(date, data, res, userId, category);
   });
 };
 
-function getTotalBefore(date, dailyData, res, userId) {
+function getTotalBefore(date, dailyData, res, userId, category) {
   db.collection(config.mongoCollection).aggregate([
     {$match: {
       $and: [
         {'date': {$lt: date}},
-        {'userId': userId}
+        {'userId': userId},
+        {'category': category}
       ]
     }},
     {$group: {

@@ -16,7 +16,8 @@ var Main = React.createClass({
       dailyData: [],
       cumulativeData: [],
       user: null,
-      categories: ['General', 'Two', 'Three', 'Four']
+      categories: [],
+      activeCategory: ''
     };
   },
 
@@ -25,31 +26,53 @@ var Main = React.createClass({
   },
 
   loadData: function() {
-    $.ajax('/api/data').done(function(data) {
-      this.setState(data);
-      this.loadCategories();
-    }.bind(this));
+    this.loadCategories();
+  },
+
+  loadPoints: function(category) {
+    $.ajax({url:'/api/data', data:{category: category}})
+      .done(function(results) {
+        this.setState(results);
+      }.bind(this));
+  },
+
+  changeCategory: function(category) {
+    this.loadPoints(category);
+    this.setState({activeCategory: category});
   },
 
   loadCategories: function() {
-    if (this.state.user !== null) {
-      $.ajax('/api/categories').done(function(data) {
-        var updatedCategories = data.reduce(
-          function(acc, item){
-            acc.push(item._id);
-            return acc
-          },[]
-        )
-        this.setState({categories: updatedCategories});
-      }.bind(this));
-    };
+    $.ajax('/api/categories').done(function(data) {
+      var updatedCategories = data.reduce(function(acc, item) {
+        acc.push(item._id);
+        return acc;
+      }, []);
+
+      var activeCategory = data.reduce(function(acc, item) {
+        if (new Date(acc.recent) > new Date(item.recent)) {
+          return acc;
+        } else {
+          return item;
+        }
+      });
+
+      this.setState({
+        activeCategory: activeCategory._id,
+        categories: updatedCategories
+      });
+
+      this.loadPoints(this.state.activeCategory);
+
+    }.bind(this));
   },
 
   addOne: function() {
     if (this.state.user !== null) {
       var entry = {
-        'userId': this.state.user
+        'userId': this.state.user,
+        'category': this.state.activeCategory
       };
+
       $.ajax({
         type: 'POST',
         url: '/api/add',
@@ -80,6 +103,8 @@ var Main = React.createClass({
         <NavbarInstance
           user={this.state.user}
           categories={this.state.categories}
+          title={this.state.activeCategory}
+          change={this.changeCategory}
         />
         <ChartContainer {...this.state} />
         <ButtonContainer addOne={this.addOne}/>

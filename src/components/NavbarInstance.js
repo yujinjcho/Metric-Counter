@@ -23,7 +23,7 @@ var NavbarInstance = React.createClass({
 
     return (
       <div className={this.state.navbarName} >
-          The Metric Counter
+          {this.props.title}
           <div className="caret-container" onClick={this.handleClick}>
             <i className={this.state.caretName}></i>
           </div>
@@ -33,6 +33,8 @@ var NavbarInstance = React.createClass({
             accountName = {this.state.accountName}
             user = {this.props.user}
             categories = {this.props.categories}
+            change = {this.props.change}
+            collapse = {this.handleClick}
           />
       </div>
     )

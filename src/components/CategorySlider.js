@@ -8,14 +8,20 @@ var CategorySlider = React.createClass({
       arrows: true,
       dots: false
     };
+
+    var handleClick = this.changeCategory;
     var categories = this.props.categories.map(function(cat, i) {
-      return <div key={i} className='category-name'>{cat}</div>
+      return <div key={i} className='category-name' onClick={handleClick.bind(null, cat)}>{cat}</div>
     });
     return (
       <Slider {...settings}>
         {categories}
       </Slider>
     );
+  },
+  changeCategory: function(category) {
+    this.props.change(category);
+    this.props.collapse();
   }
 });
 

@@ -10,7 +10,11 @@ var UserOptions = React.createClass({
       </div>:
       <div className={this.props.accountName}>
         <div className='category-container'>
-          <CategorySlider categories={this.props.categories}/>
+          <CategorySlider
+            categories={this.props.categories}
+            change = {this.props.change}
+            collapse = {this.props.collapse}
+          />
         </div>
         <div className='navbar-buttons'>Add</div>
         <div className='navbar-buttons'>Delete</div>
@@ -24,7 +28,7 @@ var UserOptions = React.createClass({
   },
   login: function() {
     window.location = '/login'
-  }
+  },
 });
 
 module.exports = UserOptions;

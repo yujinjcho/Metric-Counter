@@ -13,6 +13,8 @@ var NavbarOptions = React.createClass({
           accountName = {this.props.accountName}
           user = {this.props.user}
           categories = {this.props.categories}
+          change = {this.props.change}
+          collapse = {this.props.collapse}
         />
       </div>
     )
