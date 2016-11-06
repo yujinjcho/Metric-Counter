@@ -21,7 +21,7 @@ app.post('/api/add', function(req, res) {
     monthDay: (timeStamp.getMonth() + 1) + '-' + timeStamp.getDate()
   };
 
-  db.collection(Config.MONGO_COLLECTION).insert(newEntry, function(err, doc) {
+  db.collection(Config.mongo_collection).insert(newEntry, function(err, doc) {
     assert.equal(null, err);
     console.log('Entry has been added');
     chartData(res);
@@ -35,7 +35,7 @@ function chartData(res) {
 };
 
 function getDailyandTotalData(date, res) {
-  db.collection(Config.MONGO_COLLECTION).aggregate([
+  db.collection(Config.mongo_collection).aggregate([
     {$match: {
       'date': {
         $gte: date,
@@ -52,7 +52,7 @@ function getDailyandTotalData(date, res) {
 };
 
 function getTotalBefore(date, dailyData, res) {
-  db.collection(Config.MONGO_COLLECTION).aggregate([
+  db.collection(Config.mongo_collection).aggregate([
     {$match: {
       'date': {
         $lt: date,
@@ -127,9 +127,9 @@ function formatCumulativeInput(daily, remaining) {
   return cumulativeCounts;
 };
 
-MongoClient.connect(Config.MONGO_DEV, function(err, dbConnection) {
+MongoClient.connect(Config.mongo_dev, function(err, dbConnection) {
   db = dbConnection;
-  var server = app.listen(Config.LOCALHOSTPORT, function() {
+  var server = app.listen(Config.port, function() {
     var port = server.address().port;
     console.log('Started server at port:', port);
   });
