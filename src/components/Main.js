@@ -47,7 +47,13 @@ var Main = React.createClass({
         }
       });
     } else {
-      alert('add one');
+      var last = this.state.dateLabels.length - 1;
+      var copy = this.state.dailyData.slice();
+      copy[last]++;
+      this.setState({
+        dailyData: copy,
+        cumulativeData: copy,
+      });
     };
   },
 
@@ -55,7 +61,7 @@ var Main = React.createClass({
 
     return (
       <Grid className='main'>
-        <NavbarInstance />
+        <NavbarInstance user={this.state.user}/>
         <ChartContainer {...this.state} />
         <ButtonContainer addOne={this.addOne}/>
       </Grid>

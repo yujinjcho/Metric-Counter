@@ -1,5 +1,6 @@
 var React = require('react');
 var UserOptions = require('./UserOptions');
+
 require('../../static/css/navbar-options.css');
 
 var NavbarOptions = React.createClass({

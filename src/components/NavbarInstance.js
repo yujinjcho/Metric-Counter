@@ -12,8 +12,7 @@ var NavbarInstance = React.createClass({
       caretName: 'fa fa-caret-down caret-drop',
       navbarOptionsName: 'navbar-options-hidden',
       loginName: 'login login-hidden',
-      accountName: 'account-container account-container-hidden',
-      user: null
+      accountName: 'account-container account-container-hidden'
     }
   },
 
@@ -32,7 +31,7 @@ var NavbarInstance = React.createClass({
             options={this.state.navbarOptionsName}
             loginName = {this.state.loginName}
             accountName = {this.state.accountName}
-            user = {this.state.user}
+            user = {this.props.user}
           />
       </div>
     )

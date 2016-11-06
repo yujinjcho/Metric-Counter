@@ -39,6 +39,7 @@
 
 .navbar-buttons:hover {
     background: rgba(244, 244, 244, 0.2);
+    cursor: pointer;
 }
 
 .login {
@@ -62,4 +63,5 @@
 
 .login:hover {
     background: rgba(244, 244, 244, 0.2);
+    cursor: pointer;
 }

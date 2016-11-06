@@ -1,4 +1,20 @@
 var React = require('react');
+var Slider = require('react-slick');
+require('../../static/css/user-options.css');
+
+var SimpleSlider = React.createClass({
+  render: function () {
+    var settings = {
+      arrows: true,
+      dots: false
+    };
+    return (
+      <Slider {...settings}>
+        <div>General</div>
+      </Slider>
+    );
+  }
+});
 
 var UserOptions = React.createClass({
   render: function() {
@@ -7,15 +23,22 @@ var UserOptions = React.createClass({
         Login
       </div>:
       <div className={this.props.accountName}>
-        <div className='navbar-buttons'>Category</div>
-        <div className='navbar-buttons'>Edit</div>
+
+        <div className='category-container'>
+          <SimpleSlider />
+        </div>
         <div className='navbar-buttons'>Add</div>
         <div className='navbar-buttons'>Delete</div>
-        <div className='navbar-buttons'>Logout</div>
+        <div className='navbar-buttons' onClick={this.logout}>
+          Logout
+        </div>
       </div>
   },
+  logout: function() {
+    window.location = '/logout'
+  },
   login: function() {
-    window.location = 'http://localhost:3000/login'
+    window.location = '/login'
   }
 });
 
