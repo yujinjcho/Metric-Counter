@@ -2,14 +2,45 @@ var express = require('express');
 var app = express();
 var assert = require('assert');
 var moment = require('moment');
-var Config = require('./config');
+var config = require('./config');
 var MongoClient = require('mongodb').MongoClient;
 var bodyParser = require('body-parser');
 var db;
+var passport = require('passport')
+var Strategy = require('passport-facebook').Strategy;
+var session = require('express-session');
 
+passport.use(
+  new Strategy({
+    clientID: config.fbAppId,
+    clientSecret: config.fbSecret,
+    callbackURL: 'http://localhost:3000/login/return'},
+    function(accessToken, refreshToken, profile, cb) {
+      return cb(null, profile);
+    }
+  )
+);
+
+passport.serializeUser(function(user, cb) {
+  cb(null, user);
+});
+passport.deserializeUser(function(obj, cb) {
+  cb(null, obj);
+});
+
+app.use(session({
+  secret: config.expressSecret,
+  resave: false,
+  saveUninitialized: true,
+  cookie: {secure: false}
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.static('dist'));
 
+
 app.get('/api/data', function(req, res) {
+  console.log(req.user);
   chartData(res);
 });
 
@@ -21,12 +52,23 @@ app.post('/api/add', function(req, res) {
     monthDay: (timeStamp.getMonth() + 1) + '-' + timeStamp.getDate()
   };
 
-  db.collection(Config.mongo_collection).insert(newEntry, function(err, doc) {
+  db.collection(config.mongoCollection).insert(newEntry, function(err, doc) {
     assert.equal(null, err);
     console.log('Entry has been added');
     chartData(res);
   });
 });
+
+app.get('/login', passport.authenticate('facebook'));
+
+app.get(
+  '/login/return',
+  passport.authenticate('facebook', { session: true, failureRedirect: '/' }),
+  function(req, res) {
+    console.log(req.user);
+    res.redirect('/');
+  }
+);
 
 function chartData(res) {
   var start = new Date(moment().subtract(6, 'days')
@@ -35,7 +77,7 @@ function chartData(res) {
 };
 
 function getDailyandTotalData(date, res) {
-  db.collection(Config.mongo_collection).aggregate([
+  db.collection(config.mongoCollection).aggregate([
     {$match: {
       'date': {
         $gte: date,
@@ -52,7 +94,7 @@ function getDailyandTotalData(date, res) {
 };
 
 function getTotalBefore(date, dailyData, res) {
-  db.collection(Config.mongo_collection).aggregate([
+  db.collection(config.mongoCollection).aggregate([
     {$match: {
       'date': {
         $lt: date,
@@ -127,9 +169,9 @@ function formatCumulativeInput(daily, remaining) {
   return cumulativeCounts;
 };
 
-MongoClient.connect(Config.mongo_dev, function(err, dbConnection) {
+MongoClient.connect(config.mongoDev, function(err, dbConnection) {
   db = dbConnection;
-  var server = app.listen(Config.port, function() {
+  var server = app.listen(config.port, function() {
     var port = server.address().port;
     console.log('Started server at port:', port);
   });

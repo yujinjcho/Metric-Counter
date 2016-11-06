@@ -13,7 +13,7 @@ var NavbarInstance = React.createClass({
       navbarOptionsName: 'navbar-options-hidden',
       loginName: 'login login-hidden',
       accountName: 'account-container account-container-hidden',
-      user: 'asdf'
+      user: null
     }
   },
 
