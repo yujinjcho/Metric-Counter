@@ -32,10 +32,12 @@ var NavbarInstance = React.createClass({
             loginName = {this.state.loginName}
             accountName = {this.state.accountName}
             user = {this.props.user}
+            categories = {this.props.categories}
           />
       </div>
     )
   },
+
   handleClick: function() {
     if (this.state.navbarName === 'navbar') {
       this.extendNavbar();
@@ -43,6 +45,7 @@ var NavbarInstance = React.createClass({
       this.collapseNavbar();
     };
   },
+
   extendNavbar: function() {
     this.setState({navbarName: 'navbar extend'});
     this.setState({caretName: 'fa fa-caret-down caret-drop caret-extend'});
@@ -54,6 +57,7 @@ var NavbarInstance = React.createClass({
       });
     }.bind(this), 100);
   },
+
   collapseNavbar: function() {
     this.setState({navbarName: 'navbar'});
     this.setState({caretName: 'fa fa-caret-down caret-drop'});

@@ -15,7 +15,8 @@ var Main = React.createClass({
       dateLabels: [],
       dailyData: [],
       cumulativeData: [],
-      user: null
+      user: null,
+      categories: ['General', 'Two', 'Three', 'Four']
     };
   },
 
@@ -26,7 +27,22 @@ var Main = React.createClass({
   loadData: function() {
     $.ajax('/api/data').done(function(data) {
       this.setState(data);
+      this.loadCategories();
     }.bind(this));
+  },
+
+  loadCategories: function() {
+    if (this.state.user !== null) {
+      $.ajax('/api/categories').done(function(data) {
+        var updatedCategories = data.reduce(
+          function(acc, item){
+            acc.push(item._id);
+            return acc
+          },[]
+        )
+        this.setState({categories: updatedCategories});
+      }.bind(this));
+    };
   },
 
   addOne: function() {
@@ -61,7 +77,10 @@ var Main = React.createClass({
 
     return (
       <Grid className='main'>
-        <NavbarInstance user={this.state.user}/>
+        <NavbarInstance
+          user={this.state.user}
+          categories={this.state.categories}
+        />
         <ChartContainer {...this.state} />
         <ButtonContainer addOne={this.addOne}/>
       </Grid>

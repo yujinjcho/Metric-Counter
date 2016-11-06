@@ -37,7 +37,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static('dist'));
-
+app.use(bodyParser.json());
 
 app.get('/api/data', function(req, res) {
   var start = startDate();
@@ -48,7 +48,21 @@ app.get('/api/data', function(req, res) {
   }
 });
 
-app.use(bodyParser.json());
+app.get('/api/categories', function(req, res) {
+  db.collection(config.mongoCategories).aggregate([
+    {$match: {
+      'userId': req.user.id
+    }},
+    {$group: {
+      _id: '$category'
+    }}
+  ], function(err, data) {
+    assert.equal(null, err);
+    res.json(data);
+    //latestEntry(req, res, data);
+  });
+})
+
 app.post('/api/add', function(req, res) {
   var timeStamp = new Date();
   var newEntry = {
@@ -76,9 +90,54 @@ app.get(
   '/login/return',
   passport.authenticate('facebook', { session: true, failureRedirect: '/' }),
   function(req, res) {
-    res.redirect('/');
+    handleUser(req.user, res);
   }
 );
+
+/*
+function latestEntry(req, res, categories) {
+  db.collection(config.mongoCollection).find({'userId': req.user.id}, function(err, doc) {
+    var lastCategory = (doc === undefined) ? 'General' : doc.category
+    console.log(doc);
+    res.json({
+
+    })
+  }).sort({date: -1}).limit(1);
+};
+*/
+
+function handleUser(user, res) {
+  db.collection(config.mongoUsers).findOne({'userId': user.id}, function(err, doc) {
+    if (doc === null) {
+      console.log('Creating User');
+      createUser(user, res);
+    } else {
+      console.log('User found');
+      res.redirect('/');
+    }
+  });
+};
+
+function createUser(user, res) {
+  var userInfo = {
+    date: new Date(),
+    userId: user.id,
+    name: user.displayName
+  };
+  db.collection(config.mongoUsers).insert(userInfo, function(err, doc) {
+    createDefaultCategory(user.id, res);
+  });
+};
+
+function createDefaultCategory(userId, res) {
+  db.collection(config.mongoCategories).insert({
+    userId: userId,
+    category: 'General',
+    date: new Date()
+  }, function(err, doc) {
+    res.redirect('/');
+  });
+};
 
 function startDate() {
   return new Date(moment().subtract(6, 'days')

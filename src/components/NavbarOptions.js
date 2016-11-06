@@ -6,12 +6,13 @@ require('../../static/css/navbar-options.css');
 var NavbarOptions = React.createClass({
   render: function() {
     return (
-      <div className={this.props.options}>
+      <div className = {this.props.options}>
         <UserOptions
-          options={this.props.navbarOptionsName}
+          options = {this.props.navbarOptionsName}
           loginName = {this.props.loginName}
           accountName = {this.props.accountName}
           user = {this.props.user}
+          categories = {this.props.categories}
         />
       </div>
     )

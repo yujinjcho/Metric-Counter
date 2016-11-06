@@ -1,20 +1,6 @@
 var React = require('react');
-var Slider = require('react-slick');
+var CategorySlider = require('./CategorySlider');
 require('../../static/css/user-options.css');
-
-var SimpleSlider = React.createClass({
-  render: function () {
-    var settings = {
-      arrows: true,
-      dots: false
-    };
-    return (
-      <Slider {...settings}>
-        <div>General</div>
-      </Slider>
-    );
-  }
-});
 
 var UserOptions = React.createClass({
   render: function() {
@@ -23,9 +9,8 @@ var UserOptions = React.createClass({
         Login
       </div>:
       <div className={this.props.accountName}>
-
         <div className='category-container'>
-          <SimpleSlider />
+          <CategorySlider categories={this.props.categories}/>
         </div>
         <div className='navbar-buttons'>Add</div>
         <div className='navbar-buttons'>Delete</div>
