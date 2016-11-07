@@ -1,6 +1,6 @@
 config = {
   port: 3000,
-  mongoDev: PROCESS.ENV.MONGOURI
+  mongoDev: PROCESS.ENV.MONGOURI,
   mongoCollection: 'metrics',
   mongoUsers: 'users',
   mongoCategories: 'categories',
