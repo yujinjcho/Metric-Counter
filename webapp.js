@@ -1,14 +1,21 @@
+if (process.env.PRODUCTION === 'true') {
+  var config = require('./Config');
+} else {
+  var config = require('./localConfig');
+};
+
 var express = require('express');
 var app = express();
 var assert = require('assert');
 var moment = require('moment');
-var config = require('./config');
 var MongoClient = require('mongodb').MongoClient;
 var bodyParser = require('body-parser');
 var db;
 var passport = require('passport')
 var Strategy = require('passport-facebook').Strategy;
 var session = require('express-session');
+
+
 
 passport.use(
   new Strategy({
