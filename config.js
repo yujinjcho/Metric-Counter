@@ -1,4 +1,4 @@
-Config = {
+config = {
   port: 3000,
   mongoDev: PROCESS.ENV.MONGOURI
   mongoCollection: 'metrics',
@@ -9,4 +9,4 @@ Config = {
   fbSecret: PROCESS.ENV.FB_SECRET
 }
 
-module.exports = Config;
+module.exports = config;

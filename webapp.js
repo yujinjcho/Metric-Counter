@@ -1,5 +1,5 @@
 if (process.env.PRODUCTION === 'true') {
-  var config = require('./Config');
+  var config = require('./config');
 } else {
   var config = require('./localConfig');
 };
