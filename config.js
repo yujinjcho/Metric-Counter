@@ -1,12 +1,12 @@
 config = {
   port: 3000,
-  mongoDev: PROCESS.ENV.MONGOURI,
+  mongoDev: process.env.MONGOURI,
   mongoCollection: 'metrics',
   mongoUsers: 'users',
   mongoCategories: 'categories',
-  expressSecret: PROCESS.ENV.EXPRESS_SECRET,
-  fbAppId: PROCESS.ENV.FB_APP_ID,
-  fbSecret: PROCESS.ENV.FB_SECRET
+  expressSecret: process.env.EXPRESS_SECRET,
+  fbAppId: process.env.FB_APP_ID,
+  fbSecret: process.env.FB_SECRET
 }
 
 module.exports = config;
