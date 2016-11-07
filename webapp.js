@@ -15,8 +15,6 @@ var passport = require('passport')
 var Strategy = require('passport-facebook').Strategy;
 var session = require('express-session');
 
-
-
 passport.use(
   new Strategy({
     clientID: config.fbAppId,
@@ -89,7 +87,8 @@ app.post('/api/add', function(req, res) {
     date: timeStamp,
     monthDay: (timeStamp.getMonth() + 1) + '-' + timeStamp.getDate(),
     userId: req.body.userId,
-    category: req.body.category
+    category: req.body.category,
+    amount: req.body.amount
   };
 
   db.collection(config.mongoCollection).insert(newEntry, function(err, doc) {
@@ -230,7 +229,7 @@ function getDailyandTotalData(date, res, userId, category) {
     }},
     {$group: {
       _id: '$monthDay',
-      count: {$sum: 1}
+      count: {$sum: '$amount'}
     }}
   ], function(err, data) {
     assert.equal(null, err);
@@ -249,7 +248,7 @@ function getTotalBefore(date, dailyData, res, userId, category) {
     }},
     {$group: {
       _id: null,
-      count: {$sum: 1}
+      count: {$sum: '$amount'}
     }}
   ], function(err, data) {
     assert.equal(null, err);

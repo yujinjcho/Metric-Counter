@@ -45,11 +45,6 @@
     box-sizing: border-box;
 }
 
-.button-clicked {
-  opacity: 0.5;
-  margin-top: 3px;
-}
-
 .button-row {
   background: white;
   height: 60px;

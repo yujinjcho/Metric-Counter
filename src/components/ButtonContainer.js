@@ -13,28 +13,20 @@ var ButtonContainer = React.createClass({
     return (
       <Row className='show-grid button-row'>
           <div className={this.state.buttonStyleName}>
-            <button className='increment control'>Add</button>
-            <button className='decrement control'>Remove</button>
-            <span><input type="number"  defaultValue='1'/></span>
+            <button className='increment control' onClick={this.incrementCount}>Add</button>
+            <button className='decrement control' onClick={this.decrementCount}>Remove</button>
+            <span><input type="number" id='input-number' defaultValue='1'/></span>
           </div>
       </Row>
     )
   },
-  handleClick: function() {
-    this.changeButtonStyle();
-    setTimeout(function(){ this.changeButtonStyle() }.bind(this), 155);
-    this.props.addOne();
+
+  incrementCount: function() {
+    this.props.incrementCount();
   },
-  changeButtonStyle: function(opacityLevel) {
-    if (this.state.buttonStyleName === 'button-style') {
-      this.setState({
-        buttonStyleName: 'button-style button-clicked'
-      });
-    } else {
-      this.setState({
-        buttonStyleName: 'button-style'
-      });
-    };
+
+  decrementCount: function() {
+    this.props.decrementCount();
   }
 });
 

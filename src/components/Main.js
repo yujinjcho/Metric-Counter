@@ -85,34 +85,63 @@ var Main = React.createClass({
     return recentCategories;
   },
 
-  addOne: function() {
-    if (this.state.user !== null) {
-      var entry = {
-        'userId': this.state.user,
-        'category': this.state.activeCategory
-      };
-
-      $.ajax({
-        type: 'POST',
-        url: '/api/add',
-        contentType: 'application/json',
-        data: JSON.stringify(entry),
-        success: function(data) {
-          this.setState(data);
-        }.bind(this),
-        error: function(xhr, status, err) {
-          console.log('Error adding entry: ', err);
-        }
-      });
+  incrementCount: function() {
+    var incrementAmount = parseInt(document.getElementById('input-number').value);
+    if (incrementAmount < 1) {
+      alert('Amount must be more than 0!')
     } else {
-      var last = this.state.dateLabels.length - 1;
-      var copy = this.state.dailyData.slice();
-      copy[last]++;
-      this.setState({
-        dailyData: copy,
-        cumulativeData: copy,
-      });
+      this.createRecord(incrementAmount);
+    }
+  },
+
+  decrementCount: function() {
+    var incrementAmount = parseInt(document.getElementById('input-number').value);
+    if (incrementAmount < 1) {
+      alert('Amount must be more than 0!')
+    } else {
+      var last = this.state.dailyData.length - 1;
+      var removeAmount = Math.min(incrementAmount, this.state.dailyData[last]);
+      this.createRecord(-removeAmount);
     };
+  },
+
+  createRecord: function(amount) {
+    if (this.state.user !== null) {
+      this.sendCreateRequest(amount);
+    } else {
+      this.updateGuestData(amount);
+    };
+  },
+
+  sendCreateRequest: function(amount) {
+    var entry = {
+      'userId': this.state.user,
+      'category': this.state.activeCategory,
+      'amount': amount
+    };
+
+    $.ajax({
+      type: 'POST',
+      url: '/api/add',
+      contentType: 'application/json',
+      data: JSON.stringify(entry),
+      success: function(data) {
+        this.setState(data);
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.log('Error adding entry: ', err);
+      }
+    });
+  },
+
+  updateGuestData: function(amount) {
+    var last = this.state.dateLabels.length - 1;
+    var copy = this.state.dailyData.slice();
+    copy[last] = copy[last] + amount;
+    this.setState({
+      dailyData: copy,
+      cumulativeData: copy,
+    });
   },
 
   render: function() {
@@ -126,7 +155,10 @@ var Main = React.createClass({
           change={this.changeCategory}
         />
         <ChartContainer {...this.state} />
-        <ButtonContainer addOne={this.addOne}/>
+        <ButtonContainer
+          incrementCount={this.incrementCount}
+          decrementCount={this.decrementCount}
+        />
       </Grid>
     );
   }

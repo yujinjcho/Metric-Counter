@@ -3,6 +3,8 @@ var url = 'mongodb://localhost:27017/metric_counter';
 var assert = require('assert');
 var moment = require('moment');
 
+
+
 function recentCategories(db) {
   /*
   db.collection('metrics').aggregate([
@@ -44,12 +46,13 @@ function startDate() {
 };
 
 function createEntry(db) {
-  var timeStamp = new Date(2016, 10, 5);
+  var timeStamp = new Date(2016, 10, 7);
   var entry = {
     date: timeStamp,
     userId: '10207897850619690',
-    category: 'Other',
+    category: 'Pushups',
     monthDay: (timeStamp.getMonth() + 1) + '-' + timeStamp.getDate(),
+    amount: 5
   };
   db.collection('metrics').insert(entry, function(data){
     console.log('success');
@@ -72,11 +75,28 @@ function userCategories(db) {
   })
 }
 
+function getDailyandTotalData(db) {
+  db.collection('metrics').aggregate([
+    {$match: {
+      $and: [
+        {'date': {$gte: startDate()}},
+        {'userId': '10207897850619690'},
+        {'category': 'Pushups'}
+      ]
+    }},
+    {$group: {
+      _id: '$monthDay',
+      count: {$sum: '$amount'}
+    }}
+  ], function(err, data) {
+    assert.equal(null, err);
+    console.log(data);
+  });
+};
+
 MongoClient.connect(url, function(err, db) {
-  //recentCategories(db);
-  //createMultipleEntries(db, 3);
-  //removeNoCategories(db);
-  userCategories(db);
+  //createMultipleEntries(db, 2);
+  getDailyandTotalData(db);
 });
 
 
