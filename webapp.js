@@ -69,8 +69,7 @@ app.get('/api/categories', function(req, res) {
 
 app.post('/api/categories/:category', function(req, res) {
   if (req.user !== undefined) {
-    //createCategory(res, req.user.id, req.params.category)
-    res.send('Should create');
+    createCategory(res, req.user.id, req.params.category)
   } else {
     res.send('Must be logged in');
   }
