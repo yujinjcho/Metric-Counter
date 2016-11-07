@@ -27,9 +27,7 @@
 }
 
 .chart-row {
-    -webkit-box-flex: 2;
-        -ms-flex: 2;
-            flex: 2;
+    height: 92%;
     overflow: visible;
 }
 
