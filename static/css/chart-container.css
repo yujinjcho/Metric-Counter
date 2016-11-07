@@ -1,25 +1,3 @@
-/*
-.divider {
-    border: 1px solid #CCCCCC;
-    height: 1px;
-    width: 100%
-}
-
-.chart-row {
-    flex: 2;
-    overflow: visible;
-}
-
-.chart-container {
-    text-align: center;
-    display: flex;
-    flex-flow: column;
-    height: 100%;
-    padding-top: 50px;
-}
-*/
-
-
 .divider {
     border: 1px solid #CCCCCC;
     height: 1px;

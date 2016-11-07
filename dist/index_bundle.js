@@ -52707,9 +52707,11 @@
 	  },
 	  createCategory: function createCategory() {
 	    var newCategory = prompt('Please name your new category');
+	    var url = window.location;
+
 	    if (newCategory in this.props.categories) {
 	      alert('This category already exists!');
-	    } else if (newCategory === '') {
+	    } else if (newCategory.trim().length === 0 || newCategory === null) {
 	      alert('Please include a name');
 	    } else {
 	      $.ajax({
