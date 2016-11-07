@@ -42,28 +42,47 @@ var Main = React.createClass({
   },
 
   loadCategories: function() {
-    $.ajax('/api/categories').done(function(data) {
-      var updatedCategories = data.reduce(function(acc, item) {
-        acc.push(item._id);
-        return acc;
-      }, []);
 
-      var activeCategory = data.reduce(function(acc, item) {
-        if (new Date(acc.recent) > new Date(item.recent)) {
-          return acc;
-        } else {
-          return item;
-        }
+    $.ajax('/api/categories').done(function(data) {
+      // gets categories by last update date and if
+      // category that was created but there is no record
+      // use the created date
+
+      var updatedCategories = this.categoryTiming(data);
+
+      var updatedKeys = Object.keys(updatedCategories);
+      var activeCategory = updatedKeys.reduce(function(acc, item) {
+        var accDate = new Date(updatedCategories[acc]);
+        var itemDate = new Date(updatedCategories[item]);
+        return  accDate > itemDate ? acc : item
       });
 
       this.setState({
-        activeCategory: activeCategory._id,
-        categories: updatedCategories
+        activeCategory: activeCategory,
+        categories: Object.keys(updatedCategories)
       });
 
       this.loadPoints(this.state.activeCategory);
 
     }.bind(this));
+  },
+
+  categoryTiming: function(data) {
+    var recentUpdates = data.categoriesByUpdate.reduce(function(acc, item) {
+      acc[item._id] = item.recent;
+      return acc;
+    }, {});
+
+    var recentCategories = data.categoriesByCreated.reduce(function(acc, item) {
+      if (!(item.category in acc)) {
+        acc[item.category] = item.date;
+        return acc;
+      } else {
+        return acc;
+      };
+    }, recentUpdates)
+
+    return recentCategories;
   },
 
   addOne: function() {

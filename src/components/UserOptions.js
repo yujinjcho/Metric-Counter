@@ -2,6 +2,7 @@ var React = require('react');
 var CategorySlider = require('./CategorySlider');
 var $ = require('jquery');
 require('../../static/css/user-options.css');
+var url = require('url');
 
 var UserOptions = React.createClass({
   render: function() {
@@ -32,30 +33,44 @@ var UserOptions = React.createClass({
   },
   createCategory: function() {
     var newCategory = prompt('Please name your new category');
-    if (newCategory) {
-      alert('New Category has been created');
-      window.location = '/';
-    } else {
+    if (newCategory in this.props.categories) {
+      alert('This category already exists!');
+    } else if (newCategory === '') {
       alert('Please include a name');
-    }
+    } else {
+      $.ajax({
+        type: 'POST',
+        url: '/api/categories/' + newCategory,
+        success: function(data, textStatus, xhr) {
+          alert('Created!');
+          window.location = '/';
+        },
+        error: function(xhr, status, err) {
+          console.log('Error adding entry: ', err);
+        }
+      });
+    };
   },
   deleteCategory: function() {
+    var elem = document.getElementsByClassName('slick-active');
+    var selectedCategory = elem[0].innerHTML;
+
     var category = prompt(
-      'You will lose all data associated with this category.'
-      + ' If you wish to proceed, '
+      'You will lose all data associated with the category "'
+      + selectedCategory
+      + '". If you wish to proceed, '
       + 'please confirm the name of the category.'
     );
     if (this.props.categories.length === 1) {
       alert('You cannot delete your last category');
-    } else if (category === this.props.activeCategory) {
+    } else if (category === selectedCategory) {
 
       $.ajax({
         type: 'DELETE',
-        url: '/api/categories',
-        dataType: 'json',
-        data: {'category': this.props.activeCategory},
-        success: function(data) {
+        url: '/api/categories/' + selectedCategory,
+        success: function(data, textStatus, xhr) {
           alert('Deleted!');
+          window.location = '/';
         },
         error: function(xhr, status, err) {
           console.log('Error adding entry: ', err);

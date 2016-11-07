@@ -66,11 +66,17 @@ function removeNoCategories(db) {
   db.collection('metrics').remove({'category': {'$exists': false}});
 }
 
+function userCategories(db) {
+  db.collection('categories').find({userId: '10207897850619690'}).toArray(function(err, doc) {
+    console.log(doc);
+  })
+}
 
 MongoClient.connect(url, function(err, db) {
-  recentCategories(db);
+  //recentCategories(db);
   //createMultipleEntries(db, 3);
   //removeNoCategories(db);
+  userCategories(db);
 });
 
 
