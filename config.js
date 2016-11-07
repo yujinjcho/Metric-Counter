@@ -1,5 +1,5 @@
 config = {
-  port: process.env.port || 8000,
+  port: process.env.PORT || 8000,
   mongoDev: process.env.MONGODB_URI,
   mongoCollection: 'metrics',
   mongoUsers: 'users',
