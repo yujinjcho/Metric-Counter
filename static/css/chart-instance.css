@@ -1,6 +1,15 @@
+/*
 .chart-instance {
-  -webkit-flex: 2;
   flex: 2;
+  overflow: visible;
+  padding-top: 15px;
+  width: 97%;
+}
+*/
+.chart-instance {
+  -webkit-box-flex: 2;
+      -ms-flex: 2;
+          flex: 2;
   overflow: visible;
   padding-top: 15px;
   width: 97%;

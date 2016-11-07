@@ -1,3 +1,4 @@
+/*
 .divider {
     border: 1px solid #CCCCCC;
     height: 1px;
@@ -11,10 +12,35 @@
 
 .chart-container {
     text-align: center;
-    display: -webkit-flex;
     display: flex;
-    -webkit-flex-flow: column;
     flex-flow: column;
     height: 100%;
     padding-top: 50px;
 }
+*/
+
+
+.divider {
+    border: 1px solid #CCCCCC;
+    height: 1px;
+    width: 100%
+}
+
+.chart-row {
+    -webkit-box-flex: 2;
+        -ms-flex: 2;
+            flex: 2;
+    overflow: visible;
+}
+
+.chart-container {
+    text-align: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-flow: column;
+        flex-flow: column;
+    height: 100%;
+    padding-top: 50px;
+}
+
