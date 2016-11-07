@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Count and chart metrics",
   "main": "index.js",
+  "scripts": {
+    "start": "node webapp.js"
+  },
   "author": "Yujin Cho",
   "license": "ISC",
   "devDependencies": {
