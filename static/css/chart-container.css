@@ -11,7 +11,9 @@
 
 .chart-container {
     text-align: center;
+    display: -webkit-flex;
     display: flex;
+    -webkit-flex-flow: column;
     flex-flow: column;
     height: 100%;
     padding-top: 50px;

@@ -1,4 +1,5 @@
 .chart-instance {
+  -webkit-flex: 2;
   flex: 2;
   overflow: visible;
   padding-top: 15px;
