@@ -12,9 +12,11 @@ var ButtonContainer = React.createClass({
   render: function() {
     return (
       <Row className='show-grid button-row'>
-          <button className={this.state.buttonStyleName} onClick={ this.handleClick }>
-            Submit
-          </button>
+          <div className={this.state.buttonStyleName}>
+            <button className='increment control'>Add</button>
+            <button className='decrement control'>Remove</button>
+            <span><input type="number"  defaultValue='1'/></span>
+          </div>
       </Row>
     )
   },

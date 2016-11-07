@@ -28,17 +28,50 @@
 }
 
 .button-style {
-  width: 90%;
-  background-color: #0074D9;
   height: 50px;
   font-size: 20px;
-  border: none;
-  color: white;
-  opacity: 0.8;
-  box-shadow :0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
   font-family: Arial;
   z-index: 5;
-  margin-top: 10px;
+  width: 90%;
+  margin: 10px auto 0px auto;
+  overflow: hidden;
+}
+
+.control {
+  width: 33%;
+  height: 100%;
+  background: #0074D9;
+  box-shadow :0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  opacity: 0.8;
+  color: white;
+  font-size: 18px;
+  border: none;
+  font-weight: bold;
+}
+.button-style input {
+    width: 100%;
+    text-align: center;
+    height: 100%;
+    font-size: 20px;
+}
+.button-style .increment {
+    float: left;
+}
+.button-style .decrement {
+  float: right;
+}
+.button-style span {
+    display: block;
+    overflow: hidden;
+    padding: 0 5px;
+    height: 100%;
+}
+
+
+.button-style input, .button-style button {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .button-clicked {
