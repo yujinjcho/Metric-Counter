@@ -53,6 +53,36 @@ app.get('/api/data', function(req, res) {
   }
 });
 
+app.get('/leaderboard', function(req, res) {
+  db.collection(config.mongoCollection).aggregate([
+    {$match: {
+      $or: [
+        {'category': 'pushups'},
+        {'category': 'Pushups'},
+      ]
+    }},
+    {$group: {
+      _id: {
+        category:'$category',
+        userId: '$userId'
+      },
+      count: {$sum: '$amount'}
+    }}
+  ], function(err, data) {
+    assert.equal(null, err);
+    var results = data.reduce(function(acc, item) {
+      if (item._id.category === 'pushups') {
+        acc.Andy = item.count;
+        return acc;
+      } else if (item._id.category === 'Pushups') {
+        acc.Yujin = item.count
+        return acc;
+      }
+    }, {})
+    res.json(results);
+  });
+})
+
 app.get('/api/categories', function(req, res) {
   if (req.user === undefined) {
     var defaultCategory = {
