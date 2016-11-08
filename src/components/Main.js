@@ -87,7 +87,7 @@ var Main = React.createClass({
 
   incrementCount: function() {
     var incrementAmount = parseInt(document.getElementById('input-number').value);
-    if (incrementAmount < 1) {
+    if (incrementAmount < 1 || isNaN(incrementAmount)) {
       alert('Amount must be more than 0!')
     } else {
       this.createRecord(incrementAmount);
@@ -96,7 +96,7 @@ var Main = React.createClass({
 
   decrementCount: function() {
     var incrementAmount = parseInt(document.getElementById('input-number').value);
-    if (incrementAmount < 1) {
+    if (incrementAmount < 1 || isNaN(incrementAmount)) {
       alert('Amount must be more than 0!')
     } else {
       var last = this.state.dailyData.length - 1;

@@ -13,8 +13,8 @@ var ButtonContainer = React.createClass({
     return (
       <Row className='show-grid button-row'>
           <div className={this.state.buttonStyleName}>
-            <button className='increment control' onClick={this.incrementCount}>Add</button>
-            <button className='decrement control' onClick={this.decrementCount}>Remove</button>
+            <button className='increment control' onClick={this.decrementCount}>Remove</button>
+            <button className='decrement control' onClick={this.incrementCount}>Add</button>
             <span><input type="number" id='input-number' defaultValue='1'/></span>
           </div>
       </Row>

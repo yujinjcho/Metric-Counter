@@ -90,6 +90,8 @@ app.post('/api/add', function(req, res) {
     category: req.body.category,
     amount: req.body.amount
   };
+  console.log(timeStamp);
+  console.log((timeStamp.getMonth() + 1) + '-' + timeStamp.getDate());
 
   db.collection(config.mongoCollection).insert(newEntry, function(err, doc) {
     assert.equal(null, err);
