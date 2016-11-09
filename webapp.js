@@ -96,9 +96,13 @@ function totalPushups(res, userData) {
     }, {})
 
     var results = Object.keys(userIdNameMapping).reduce(function(acc, item) {
-      var userPos = {name: userIdNameMapping[item], count: pushupsByUser[item]};
-      acc.push(userPos);
-      return acc;
+      if (Number.isInteger(pushupsByUser[item])) {
+        var userPos = {name: userIdNameMapping[item], count: pushupsByUser[item]};
+        acc.push(userPos);
+        return acc;
+      } else {
+        return acc;
+      }
     }, []);
 
     var output = results
