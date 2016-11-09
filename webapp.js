@@ -54,6 +54,26 @@ app.get('/api/data', function(req, res) {
 });
 
 app.get('/leaderboard', function(req, res) {
+  db.collection(config.mongoUsers).aggregate([
+      {$group: {
+        _id: {
+          userId: '$userId',
+          name: '$name'
+        }
+      }}
+    ], function(err, data) {
+      totalPushups(res, data);
+    }
+  );
+})
+
+function totalPushups(res, userData) {
+  var userIdNameMapping = userData.reduce(function(acc, item) {
+    acc[item._id.userId] = item._id.name;
+    return acc;
+  }, {});
+
+
   db.collection(config.mongoCollection).aggregate([
     {$match: {
       $or: [
@@ -70,18 +90,27 @@ app.get('/leaderboard', function(req, res) {
     }}
   ], function(err, data) {
     assert.equal(null, err);
-    var results = data.reduce(function(acc, item) {
-      if (item._id.category === 'pushups') {
-        acc.Andy = item.count;
-        return acc;
-      } else if (item._id.category === 'Pushups') {
-        acc.Yujin = item.count
-        return acc;
-      }
+    var pushupsByUser = data.reduce(function(acc, item) {
+      acc[item._id.userId] = item.count;
+      return acc;
     }, {})
-    res.json(results);
+
+    var results = Object.keys(userIdNameMapping).reduce(function(acc, item) {
+      var userPos = {name: userIdNameMapping[item], count: pushupsByUser[item]};
+      acc.push(userPos);
+      return acc;
+    }, []);
+
+    var output = results
+      .sort(function(a, b) { return b.count - a.count })
+      .reduce(function(acc, item) {
+        acc.push(item.name + ':' + item.count);
+        return acc;
+      }, [])
+
+    res.json(output);
   });
-})
+};
 
 app.get('/api/categories', function(req, res) {
   if (req.user === undefined) {
