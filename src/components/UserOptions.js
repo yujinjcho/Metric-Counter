@@ -33,17 +33,20 @@ var UserOptions = React.createClass({
   },
   createCategory: function() {
     var newCategory = prompt('Please name your new category');
-    var url = window.location;
-
 
     if (newCategory in this.props.categories) {
       alert('This category already exists!');
     } else if (newCategory.trim().length === 0 || newCategory === null) {
       alert('Please include a name');
     } else {
+
+      var apiEndPoint = url.resolve(window.location.href, '/api/categories/');
+      var endPointURL = url.resolve(apiEndPoint, newCategory);
+      console.log(endPointURL);
+
       $.ajax({
         type: 'POST',
-        url: '/api/categories/' + newCategory,
+        url: endPointURL,
         success: function(data, textStatus, xhr) {
           alert('Created!');
           window.location = '/';
@@ -68,9 +71,12 @@ var UserOptions = React.createClass({
       alert('You cannot delete your last category');
     } else if (category === selectedCategory) {
 
+      var apiEndPoint = url.resolve(window.location.href, '/api/categories/');
+      var endPointURL = url.resolve(apiEndPoint, selectedCategory)
+
       $.ajax({
         type: 'DELETE',
-        url: '/api/categories/' + selectedCategory,
+        url: endPointURL,
         success: function(data, textStatus, xhr) {
           alert('Deleted!');
           window.location = '/';
