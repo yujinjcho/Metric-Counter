@@ -69,8 +69,7 @@ app.get('/leaderboard', function(req, res) {
 
 function totalPushups(res, userData) {
   var userIdNameMapping = userData.reduce(function(acc, item) {
-    acc[item._id.userId] = item._id.name;
-    return acc;
+    return Object.assign(acc, { [item._id.userId]: item._id.name });
   }, {});
 
 
@@ -90,27 +89,19 @@ function totalPushups(res, userData) {
     }}
   ], function(err, data) {
     assert.equal(null, err);
+
     var pushupsByUser = data.reduce(function(acc, item) {
-      acc[item._id.userId] = item.count;
-      return acc;
+      return Object.assign(acc, { [item._id.userId]: item.count });
     }, {})
 
-    var results = Object.keys(userIdNameMapping).reduce(function(acc, item) {
-      if (Number.isInteger(pushupsByUser[item])) {
-        var userPos = {name: userIdNameMapping[item], count: pushupsByUser[item]};
-        acc.push(userPos);
-        return acc;
-      } else {
-        return acc;
-      }
-    }, []);
+    var results = Object.keys(userIdNameMapping).map(function(userId) {
+      return { name: userIdNameMapping[userId], count: pushupsByUser[userId] };
+    });
 
     var output = results
+      .filter(function(user) { return Number.isInteger(user.count) })
       .sort(function(a, b) { return b.count - a.count })
-      .reduce(function(acc, item) {
-        acc.push(item.name + ':' + item.count);
-        return acc;
-      }, [])
+      .map(function(user) { return user.name + ': ' + user.count });
 
     res.json(output);
   });
