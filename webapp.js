@@ -15,6 +15,8 @@ var passport = require('passport')
 var Strategy = require('passport-facebook').Strategy;
 var session = require('express-session');
 
+var PUSHUPS_GOAL = 5000;
+
 passport.use(
   new Strategy({
     clientID: config.fbAppId,
@@ -85,17 +87,40 @@ function totalPushups(res, userData) {
         category:'$category',
         userId: '$userId'
       },
-      count: {$sum: '$amount'}
+      count: {$sum: '$amount'},
+      startDate: { $min: '$date' }
     }}
   ], function(err, data) {
     assert.equal(null, err);
 
-    var pushupsByUser = data.reduce(function(acc, item) {
-      return Object.assign(acc, { [item._id.userId]: item.count });
+    var today = moment(new Date());
+
+    var statsByUser = data.reduce(function(acc, item) {
+      var days = today.diff(moment(item.startDate), 'days') + 1;
+      var dailyAverage = Math.round(item.count / days * 10) / 10;
+      var projectedDaysLeft = Math.round((PUSHUPS_GOAL - item.count) / dailyAverage);
+
+      return Object.assign(
+        acc,
+        {
+          [item._id.userId]: {
+            count: item.count,
+            days: days,
+            dailyAverage: dailyAverage,
+            progress: Math.round(item.count / PUSHUPS_GOAL * 100) + '%',
+            projectedDaysLeft: projectedDaysLeft
+          }
+        }
+      );
     }, {})
 
+    console.log(statsByUser);
+
     var results = Object.keys(userIdNameMapping).map(function(userId) {
-      return { name: userIdNameMapping[userId], count: pushupsByUser[userId] };
+      return {
+        name: userIdNameMapping[userId],
+        count: statsByUser[userId].count
+      };
     });
 
     var output = results
