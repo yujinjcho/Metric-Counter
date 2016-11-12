@@ -9,7 +9,7 @@ var moment = require('moment');
 
 var GOAL = 5000;
 
-function totalPushups(db, res, userData) {
+function renderLeaderboard(db, res, userData) {
   var userIdNameMapping = userData.reduce(function(acc, item) {
     return Object.assign(acc, { [item._id.userId]: item._id.name });
   }, {});
@@ -70,5 +70,5 @@ function totalPushups(db, res, userData) {
 }
 
 module.exports = {
-  totalPushups: totalPushups
+  renderLeaderboard: renderLeaderboard
 };

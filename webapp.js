@@ -66,7 +66,7 @@ app.get('/leaderboard', function(req, res) {
         }
       }}
     ], function(err, data) {
-      pushups.totalPushups(db, res, data);
+      pushups.renderLeaderboard(db, res, data);
     }
   );
 })
