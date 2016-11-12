@@ -17,6 +17,9 @@ var session = require('express-session');
 
 var PUSHUPS_GOAL = 5000;
 
+app.set('views', './views');
+app.set('view engine', 'pug');
+
 passport.use(
   new Strategy({
     clientID: config.fbAppId,
@@ -126,7 +129,7 @@ function totalPushups(res, userData) {
       .filter(function(user) { return Number.isInteger(user.count) })
       .sort(function(a, b) { return b.count - a.count });
 
-    res.json(output);
+    res.render('leaderboard', { users: output });
   });
 };
 

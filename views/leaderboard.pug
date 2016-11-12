@@ -1,0 +1,17 @@
+h1 Leaderboard
+table
+  tr
+    th Name
+    th Count
+    th Days
+    th Daily Average
+    th Progress
+    th Projected Days Left
+  each user in users
+    tr
+      td= user.name
+      td= user.count
+      td= user.name
+      td= user.dailyAverage
+      td= user.progress
+      td= user.projectedDaysLeft
