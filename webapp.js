@@ -114,19 +114,17 @@ function totalPushups(res, userData) {
       );
     }, {})
 
-    console.log(statsByUser);
-
     var results = Object.keys(userIdNameMapping).map(function(userId) {
-      return {
-        name: userIdNameMapping[userId],
-        count: statsByUser[userId].count
-      };
+      return Object.assign(
+        {},
+        { name: userIdNameMapping[userId] },
+        statsByUser[userId]
+      );
     });
 
     var output = results
       .filter(function(user) { return Number.isInteger(user.count) })
-      .sort(function(a, b) { return b.count - a.count })
-      .map(function(user) { return user.name + ': ' + user.count });
+      .sort(function(a, b) { return b.count - a.count });
 
     res.json(output);
   });
