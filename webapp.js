@@ -14,8 +14,7 @@ var db;
 var passport = require('passport')
 var Strategy = require('passport-facebook').Strategy;
 var session = require('express-session');
-
-var PUSHUPS_GOAL = 5000;
+var pushups = require('./pushups');
 
 app.set('views', './views');
 app.set('view engine', 'pug');
@@ -67,71 +66,10 @@ app.get('/leaderboard', function(req, res) {
         }
       }}
     ], function(err, data) {
-      totalPushups(res, data);
+      pushups.renderLeaderboard(db, res, data);
     }
   );
 })
-
-function totalPushups(res, userData) {
-  var userIdNameMapping = userData.reduce(function(acc, item) {
-    return Object.assign(acc, { [item._id.userId]: item._id.name });
-  }, {});
-
-
-  db.collection(config.mongoCollection).aggregate([
-    {$match: {
-      $or: [
-        {'category': 'pushups'},
-        {'category': 'Pushups'},
-      ]
-    }},
-    {$group: {
-      _id: {
-        category:'$category',
-        userId: '$userId'
-      },
-      count: {$sum: '$amount'},
-      startDate: { $min: '$date' }
-    }}
-  ], function(err, data) {
-    assert.equal(null, err);
-
-    var today = moment(new Date());
-
-    var statsByUser = data.reduce(function(acc, item) {
-      var days = today.diff(moment(item.startDate), 'days') + 1;
-      var dailyAverage = Math.round(item.count / days * 10) / 10;
-      var projectedDaysLeft = Math.round((PUSHUPS_GOAL - item.count) / dailyAverage);
-
-      return Object.assign(
-        acc,
-        {
-          [item._id.userId]: {
-            count: item.count,
-            days: days,
-            dailyAverage: dailyAverage,
-            progress: Math.round(item.count / PUSHUPS_GOAL * 100) + '%',
-            projectedDaysLeft: projectedDaysLeft
-          }
-        }
-      );
-    }, {})
-
-    var results = Object.keys(userIdNameMapping).map(function(userId) {
-      return Object.assign(
-        {},
-        { name: userIdNameMapping[userId] },
-        statsByUser[userId]
-      );
-    });
-
-    var output = results
-      .filter(function(user) { return Number.isInteger(user.count) })
-      .sort(function(a, b) { return b.count - a.count });
-
-    res.render('leaderboard', { users: output });
-  });
-};
 
 app.get('/api/categories', function(req, res) {
   if (req.user === undefined) {
