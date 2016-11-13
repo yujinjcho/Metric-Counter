@@ -1,9 +1,4 @@
-if (process.env.PRODUCTION === 'true') {
-  var config = require('./config');
-} else {
-  var config = require('./localConfig');
-};
-
+var config = process.env.PRODUCTION === 'true' ? require('./config') : require('./localConfig');
 var assert = require('assert');
 var moment = require('moment');
 
@@ -19,10 +14,10 @@ function renderLeaderboard(db, res, userData) {
     }},
     {$group: {
       _id: {
-        category:'$category',
+        category: '$category',
         userId: '$userId'
       },
-      count: {$sum: '$amount'},
+      count: { $sum: '$amount' },
       startDate: { $min: '$date' }
     }}
   ], function(err, data) {
