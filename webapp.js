@@ -319,7 +319,7 @@ function formatDailyInput(aggregatedDailyData, datesInput) {
 function formatCumulativeInput(daily, remaining) {
   var totalCount = remaining[0] ? remaining[0].count : 0;
   var countsCopy = daily.slice();
-  var dailyCount = countsCopy.reduce(function(acc, item) {
+  var dailyCount = daily.reduce(function(acc, item) {
     return acc + (Number.isInteger(item) ? item : 0);
   }, 0);
   var remainingCount = totalCount - dailyCount;
