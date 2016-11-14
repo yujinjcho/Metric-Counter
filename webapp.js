@@ -261,7 +261,6 @@ function getTotalBefore(date, dailyData, res, userId, category) {
   db.collection(config.mongoCollection).aggregate([
     {$match: {
       $and: [
-        {'date': {$lt: date}},
         {'userId': userId},
         {'category': category}
       ]
@@ -318,8 +317,12 @@ function formatDailyInput(aggregatedDailyData, datesInput) {
 };
 
 function formatCumulativeInput(daily, remaining) {
-  var remainingCount = remaining[0] ? remaining[0].count : 0;
+  var totalCount = remaining[0] ? remaining[0].count : 0;
   var countsCopy = daily.slice();
+  var dailyCount = countsCopy.reduce(function(acc, item) {
+    return Number.isInteger(item) ? item : 0;
+  }, 0);
+  var remainingCount = totalCount - dailyCount;
 
   for (var i = 2; i < countsCopy.length; i++) {
     countsCopy[i] = countsCopy[i] + countsCopy[i - 1];
