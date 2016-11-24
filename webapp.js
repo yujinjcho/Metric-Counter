@@ -74,6 +74,10 @@ app.get('/leaderboard', function(req, res) {
 })
 
 app.get('/api/categories', function(req, res) {
+  loadCategories(req, res);
+});
+
+function loadCategories(req, res) {
   if (req.user === undefined) {
     var defaultCategory = {
       categoriesByUpdate: [{_id: 'General', recent: new Date()}],
@@ -83,7 +87,7 @@ app.get('/api/categories', function(req, res) {
   } else {
     recentCategories(req, res);
   };
-});
+};
 
 app.post('/api/categories/:category', function(req, res) {
   if (req.user !== undefined) {
