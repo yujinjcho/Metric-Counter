@@ -1,16 +1,18 @@
 var config = process.env.PRODUCTION === 'true' ? require('./config') : require('./localConfig');
 
-var express = require('express');
-var app = express();
 var assert = require('assert');
 var moment = require('moment');
 var MongoClient = require('mongodb').MongoClient;
-var bodyParser = require('body-parser');
-var db;
 var passport = require('passport')
 var Strategy = require('passport-facebook').Strategy;
+
+var express = require('express');
+var bodyParser = require('body-parser');
 var session = require('express-session');
 var pushups = require('./pushups');
+
+var app = express();
+var db;
 
 app.set('views', './views');
 app.set('view engine', 'pug');
@@ -45,13 +47,17 @@ app.use(express.static('dist'));
 app.use(bodyParser.json());
 
 app.get('/api/data', function(req, res) {
+  loadData(req, res);
+});
+
+function loadData(req, res) {
   var start = startDate();
   if (req.user === undefined) {
     guestData(res, start);
   } else {
     getDailyandTotalData(start, res, req.user.id, req.query.category);
   }
-});
+};
 
 app.get('/leaderboard', function(req, res) {
   db.collection(config.mongoUsers).aggregate([
