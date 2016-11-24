@@ -38,9 +38,9 @@ function cumulativeData(daily, remaining) {
     if (i === 0) {
       acc.push(item);
     } else if (i === 1) {
-      acc.push(item + totalCount - dailyCount;);
+      acc.push(item + totalCount - dailyCount);
     } else {
-      acc.push(acc[acc.length-1] + item);
+      acc.push(acc[acc.length - 1] + item);
     };
     return acc;
   }, []);

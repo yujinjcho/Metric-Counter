@@ -1,4 +1,7 @@
-var config = process.env.PRODUCTION === 'true' ? require('./config') : require('./localConfig');
+var config = process.env.PRODUCTION === 'true' ?
+  require('./config') :
+  require('./localConfig');
+
 var assert = require('assert');
 var moment = require('moment');
 var c3formatter = require('./c3formatter');
@@ -25,7 +28,13 @@ function addEntry(req, res, db) {
   db.collection(config.mongoCollection).insert(newEntry, function(err, doc) {
     assert.equal(null, err);
     console.log('Entry has been added');
-    getDailyandTotalData(startDate(), res, req.body.userId, req.body.category, db);
+    getDailyandTotalData(
+      startDate(),
+      res,
+      req.body.userId,
+      req.body.category,
+      db
+    );
   });
 }
 
@@ -91,8 +100,6 @@ function guestData(res, start) {
   });
 };
 
-
-
 function loadCategories(req, res, db) {
   if (req.user === undefined) {
     var defaultCategory = {
@@ -108,7 +115,7 @@ function loadCategories(req, res, db) {
 function recentCategories(req, res, db) {
   db.collection(config.mongoCollection).aggregate([
     {$match: {'userId': req.user.id}},
-    {$sort: {date:1}},
+    {$sort: {date: 1}},
     {$group: {
       _id: '$category',
       recent: {$last: '$date'}
@@ -120,25 +127,27 @@ function recentCategories(req, res, db) {
 };
 
 function userCategories(req, res, categoriesLastUpdated, db) {
-  db.collection(config.mongoCategories).find({userId: req.user.id}).toArray(function(err, doc) {
-    var result = {
-      categoriesByCreated: doc,
-      categoriesByUpdate: categoriesLastUpdated
-    };
-    res.json(result);
-  })
+  db.collection(config.mongoCategories).find(
+    {userId: req.user.id}).toArray(function(err, doc) {
+      var result = {
+        categoriesByCreated: doc,
+        categoriesByUpdate: categoriesLastUpdated
+      };
+      res.json(result);
+    }
+  );
 };
 
 function createCategory(req, res, db) {
   if (req.user !== undefined) {
-    createCategoryInDB(res, req.user.id, req.params.category, db)
+    createCategoryInDB(res, req.user.id, req.params.category, db);
   } else {
     res.send('Must be logged in');
   }
 };
 
 function deleteCategory(req, res, db) {
-  if (req.user !== undefined ) {
+  if (req.user !== undefined) {
     deleteCategoryInDB(res, req.user.id, req.params.category, db);
   } else {
     res.send('Must be logged in');
@@ -172,19 +181,21 @@ function deleteCategoryMetrics(res, userId, category, db) {
   }, function(err, result) {
     assert.equal(err, null);
     res.send('Delete Successful');
-  })
+  });
 };
 
 function handleUser(user, res, db) {
-  db.collection(config.mongoUsers).findOne({'userId': user.id}, function(err, doc) {
-    if (doc === null) {
-      console.log('Creating User');
-      createUser(user, res, db);
-    } else {
-      console.log('User found');
-      res.redirect('/');
+  db.collection(config.mongoUsers).findOne(
+    {'userId': user.id}, function(err, doc) {
+      if (doc === null) {
+        console.log('Creating User');
+        createUser(user, res, db);
+      } else {
+        console.log('User found');
+        res.redirect('/');
+      }
     }
-  });
+  );
 };
 
 function createUser(user, res, db) {
@@ -208,13 +219,10 @@ function createDefaultCategory(userId, res, db) {
   });
 };
 
-
 function startDate() {
   return new Date(moment().subtract(6, 'days')
     .startOf('day').toISOString());
 };
-
-
 
 module.exports = {
   loadData: loadData,
@@ -223,4 +231,4 @@ module.exports = {
   createCategory: createCategory,
   deleteCategory: deleteCategory,
   handleUser: handleUser,
-}
+};
