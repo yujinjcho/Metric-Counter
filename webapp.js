@@ -9,8 +9,8 @@ var Strategy = require('passport-facebook').Strategy;
 var express = require('express');
 var bodyParser = require('body-parser');
 var session = require('express-session');
-var pushups = require('./pushups');
-var dataManager = require('./dataManager');
+var pushups = require('./app_modules/pushups');
+var dataManager = require('./app_modules/dataManager');
 
 var app = express();
 var db;
