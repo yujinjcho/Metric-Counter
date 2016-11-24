@@ -1,8 +1,4 @@
-if (process.env.PRODUCTION === 'true') {
-  var config = require('./config');
-} else {
-  var config = require('./localConfig');
-};
+var config = process.env.PRODUCTION === 'true' ? require('./config') : require('./localConfig');
 
 var express = require('express');
 var app = express();
