@@ -1,6 +1,7 @@
 var config = process.env.PRODUCTION === 'true' ? require('./config') : require('./localConfig');
 var assert = require('assert');
 var moment = require('moment');
+var c3formatter = require('./c3formatter');
 
 function loadData(req, res, db) {
   var start = startDate();
@@ -67,9 +68,9 @@ function getTotalBefore(date, dailyData, res, userId, category, db) {
 };
 
 function formatData(remaining, lastSevenDays, userId) {
-  var dateLabels = getDatesLabelInput();
-  var dailyData = formatDailyInput(lastSevenDays, dateLabels);
-  var cumulativeData = formatCumulativeInput(dailyData, remaining);
+  var dateLabels = c3formatter.createDateLabels();
+  var dailyData = c3formatter.dailyData(lastSevenDays, dateLabels);
+  var cumulativeData = c3formatter.cumulativeData(dailyData, remaining);
   return {
     dateLabels: dateLabels,
     dailyData: dailyData,
@@ -78,44 +79,8 @@ function formatData(remaining, lastSevenDays, userId) {
   };
 };
 
-function formatDailyInput(aggregatedDailyData, datesInput) {
-  var dataDict = aggregatedDailyData.reduce(
-    function(d, item) {
-      d[item._id] = item.count;
-      return d;
-    }, {}
-  );
-
-  return ['daily'].concat(datesInput.slice(1).map(function(date) {
-    return dataDict[date] || 0;
-  }));
-};
-
-function formatCumulativeInput(daily, remaining) {
-  var totalCount = remaining[0] ? remaining[0].count : 0;
-  var countsCopy = daily.slice();
-  var dailyCount = daily.reduce(function(acc, item) {
-    return acc + (Number.isInteger(item) ? item : 0);
-  }, 0);
-  var remainingCount = totalCount - dailyCount;
-
-  for (var i = 2; i < countsCopy.length; i++) {
-    countsCopy[i] = countsCopy[i] + countsCopy[i - 1];
-  };
-
-  var cumulativeCounts = countsCopy.map(function(item) {
-    if (item === 'daily') {
-      return 'daily';
-    } else {
-      return item + remainingCount;
-    }
-  });
-
-  return cumulativeCounts;
-};
-
 function guestData(res, start) {
-  var dateLabels = getDatesLabelInput();
+  var dateLabels = c3formatter.createDateLabels();
   var dailyData = ['daily', 0, 0, 0, 0, 0, 0];
   var cumulativeData = ['daily', 0, 0, 0, 0, 0, 0];
   res.json({
@@ -126,20 +91,7 @@ function guestData(res, start) {
   });
 };
 
-function getDatesLabelInput() {
-  var dates = [];
-  var dateObj = new Date();
 
-  for (i = 0; i < 6; i++) {
-    var month = dateObj.getMonth() + 1;
-    var date = dateObj.getDate() ;
-    var label =  month + '-' + date;
-    dates.unshift(label);
-    dateObj.setDate(dateObj.getDate() - 1);
-  };
-
-  return ['x'].concat(dates);
-};
 
 function loadCategories(req, res, db) {
   if (req.user === undefined) {
