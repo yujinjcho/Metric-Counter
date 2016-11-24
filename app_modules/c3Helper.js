@@ -1,7 +1,7 @@
 function format(remaining, lastSevenDays, userId) {
   var dateLabels = createDateLabels();
-  var dailyData = dailyData(lastSevenDays, dateLabels);
-  var cumulativeData = cumulativeData(dailyData, remaining);
+  var dailyData = formatDaily(lastSevenDays, dateLabels);
+  var cumulativeData = formatCumulative(dailyData, remaining);
   return {
     dateLabels: dateLabels,
     dailyData: dailyData,
@@ -25,7 +25,7 @@ function createDateLabels() {
   return ['x'].concat(dates);
 };
 
-function dailyData(aggregatedDailyData, datesInput) {
+function formatDaily(aggregatedDailyData, datesInput) {
   var dataDict = aggregatedDailyData.reduce(
     function(d, item) {
       d[item._id] = item.count;
@@ -38,7 +38,7 @@ function dailyData(aggregatedDailyData, datesInput) {
   }));
 };
 
-function cumulativeData(daily, remaining) {
+function formatCumulative(daily, remaining) {
   var totalCount = remaining[0] ? remaining[0].count : 0;
   var dailyCount = daily.reduce(function(acc, item) {
     return acc + (Number.isInteger(item) ? item : 0);
@@ -57,5 +57,6 @@ function cumulativeData(daily, remaining) {
 };
 
 module.exports = {
-  format: format
+  format: format,
+  createDateLabels: createDateLabels
 };

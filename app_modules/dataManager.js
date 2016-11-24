@@ -4,7 +4,7 @@ var config = process.env.PRODUCTION === 'true' ?
 
 var assert = require('assert');
 var moment = require('moment');
-var c3formatter = require('./c3formatter');
+var c3Helper = require('./c3Helper');
 
 function loadData(req, res, db) {
   var start = startDate();
@@ -71,25 +71,13 @@ function getTotalBefore(date, dailyData, res, userId, category, db) {
     }}
   ], function(err, data) {
     assert.equal(null, err);
-    var result = formatData(data, dailyData, userId);
+    var result = c3Helper.format(data, dailyData, userId);
     res.json(result);
   });
 };
 
-function formatData(remaining, lastSevenDays, userId) {
-  var dateLabels = c3formatter.createDateLabels();
-  var dailyData = c3formatter.dailyData(lastSevenDays, dateLabels);
-  var cumulativeData = c3formatter.cumulativeData(dailyData, remaining);
-  return {
-    dateLabels: dateLabels,
-    dailyData: dailyData,
-    cumulativeData: cumulativeData,
-    user: userId
-  };
-};
-
 function guestData(res, start) {
-  var dateLabels = c3formatter.createDateLabels();
+  var dateLabels = c3Helper.createDateLabels();
   var dailyData = ['daily', 0, 0, 0, 0, 0, 0];
   var cumulativeData = ['daily', 0, 0, 0, 0, 0, 0];
   res.json({
