@@ -1,9 +1,11 @@
-var config = process.env.PRODUCTION === 'true' ? require('./config') : require('./localConfig');
+var config = process.env.PRODUCTION === 'true' ?
+  require('./config') :
+  require('./localConfig');
 
 var assert = require('assert');
 
 var MongoClient = require('mongodb').MongoClient;
-var passport = require('passport')
+var passport = require('passport');
 var Strategy = require('passport-facebook').Strategy;
 
 var express = require('express');
@@ -63,7 +65,7 @@ app.get('/leaderboard', function(req, res) {
       pushups.renderLeaderboard(db, res, data);
     }
   );
-})
+});
 
 app.get('/api/categories', function(req, res) {
   dataManager.loadCategories(req, res, db);
@@ -75,7 +77,7 @@ app.post('/api/categories/:category', function(req, res) {
 
 app.delete('/api/categories/:category', function(req, res) {
   dataManager.deleteCategory(req, res, db);
-})
+});
 
 app.post('/api/add', function(req, res) {
   dataManager.addEntry(req, res, db);
@@ -86,12 +88,12 @@ app.get('/login', passport.authenticate('facebook'));
 app.get('/logout', function(req, res) {
   req.session.destroy(function(err) {
     res.redirect('/');
-  })
-})
+  });
+});
 
 app.get(
   '/login/return',
-  passport.authenticate('facebook', { session: true, failureRedirect: '/' }),
+  passport.authenticate('facebook', {session: true, failureRedirect: '/'}),
   function(req, res) {
     dataManager.handleUser(req.user, res, db);
   }

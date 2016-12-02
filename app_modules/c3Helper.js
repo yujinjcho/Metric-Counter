@@ -8,7 +8,7 @@ function format(remaining, lastSevenDays, userId) {
     cumulativeData: cumulativeData,
     user: userId
   };
-};
+}
 
 function createDateLabels() {
   var dates = [];
@@ -23,7 +23,7 @@ function createDateLabels() {
   };
 
   return ['x'].concat(dates);
-};
+}
 
 function formatDaily(aggregatedDailyData, datesInput) {
   var dataDict = aggregatedDailyData.reduce(
@@ -36,7 +36,7 @@ function formatDaily(aggregatedDailyData, datesInput) {
   return ['daily'].concat(datesInput.slice(1).map(function(date) {
     return dataDict[date] || 0;
   }));
-};
+}
 
 function formatCumulative(daily, remaining) {
   var totalCount = remaining[0] ? remaining[0].count : 0;
@@ -54,7 +54,7 @@ function formatCumulative(daily, remaining) {
     };
     return acc;
   }, []);
-};
+}
 
 module.exports = {
   format: format,
