@@ -1,4 +1,7 @@
-var config = process.env.PRODUCTION === 'true' ? require('./config') : require('./localConfig');
+var config = process.env.PRODUCTION === 'true' ?
+  require('../config') :
+  require('../localConfig');
+
 var assert = require('assert');
 var moment = require('moment');
 
