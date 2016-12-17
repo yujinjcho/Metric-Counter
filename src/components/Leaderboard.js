@@ -1,6 +1,8 @@
 import React from 'react';
 import $ from 'jquery';
 
+const fields = ['name', 'count', 'days', 'dailyAverage', 'progress', 'projectedDaysLeft'];
+
 export default class Leaderboard extends React.Component {
   constructor() {
     super();
@@ -44,15 +46,10 @@ export default class Leaderboard extends React.Component {
     return <tbody>{this.state.users.map(this._renderUser)}</tbody>;
   }
 
-  _renderUser({ name, count, days, dailyAverage, progress, projectedDaysLeft }, i) {
+  _renderUser(user, i) {
     return (
       <tr key={i}>
-        <td>{name}</td>
-        <td>{count}</td>
-        <td>{days}</td>
-        <td>{dailyAverage}</td>
-        <td>{progress}</td>
-        <td>{projectedDaysLeft}</td>
+        {fields.map((field, i) => <td key={i}>{user[field]}</td>)}
       </tr>
     );
   }
