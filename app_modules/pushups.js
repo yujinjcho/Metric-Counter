@@ -7,7 +7,7 @@ var moment = require('moment');
 
 var GOAL = 5000;
 
-function renderLeaderboard(db, res, userData) {
+function leaderboardData(db, res, userData) {
   db.collection(config.mongoCollection).aggregate([
     {$match: {
       $or: [
@@ -26,7 +26,7 @@ function renderLeaderboard(db, res, userData) {
   ], function(err, data) {
     assert.equal(null, err);
 
-    res.render('leaderboard', { users: usersSummary(data, userIdNameMapping(userData)) });
+    res.json({ users: usersSummary(data, userIdNameMapping(userData)) });
   });
 }
 
@@ -71,5 +71,5 @@ function usersSummary(userData, userIdNameMapping) {
 }
 
 module.exports = {
-  renderLeaderboard: renderLeaderboard
+  leaderboardData: leaderboardData
 };
