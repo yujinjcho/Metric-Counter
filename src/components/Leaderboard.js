@@ -14,9 +14,7 @@ export default class Leaderboard extends React.Component {
   }
 
   componentDidMount() {
-    $.get('/api/leaderboard', ({ users }) => {
-      this.setState({ users })
-    });
+    $.get('/api/leaderboard', (data) => this.setState(data));
   }
 
   render() {
