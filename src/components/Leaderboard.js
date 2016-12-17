@@ -3,6 +3,10 @@ import $ from 'jquery';
 
 const fields = ['name', 'count', 'days', 'dailyAverage', 'progress', 'projectedDaysLeft'];
 
+function titleize(field) {
+  return `${field[0].toUpperCase()}${field.slice(1)}`.match(/[A-Z]{1}[a-z]*/g).join(' ');
+}
+
 export default class Leaderboard extends React.Component {
   constructor() {
     super();
@@ -13,10 +17,6 @@ export default class Leaderboard extends React.Component {
     $.get('/api/leaderboard', ({ users }) => {
       this.setState({ users })
     });
-  }
-
-  _titleize(field) {
-    return `${field[0].toUpperCase()}${field.slice(1)}`.match(/[A-Z]{1}[a-z]*/g).join(' ');
   }
 
   render() {
@@ -35,7 +35,7 @@ export default class Leaderboard extends React.Component {
     return (
       <thead>
         <tr>
-          {fields.map((field, i) => <th key={i}>{this._titleize(field)}</th>)}
+          {fields.map((field, i) => <th key={i}>{titleize(field)}</th>)}
         </tr>
       </thead>
     );
