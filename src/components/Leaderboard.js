@@ -15,6 +15,10 @@ export default class Leaderboard extends React.Component {
     });
   }
 
+  _titleize(field) {
+    return `${field[0].toUpperCase()}${field.slice(1)}`.match(/[A-Z]{1}[a-z]*/g).join(' ');
+  }
+
   render() {
     return (
       <div>
@@ -31,12 +35,7 @@ export default class Leaderboard extends React.Component {
     return (
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Count</th>
-          <th>Days</th>
-          <th>Average</th>
-          <th>Progress</th>
-          <th>Days Left</th>
+          {fields.map((field, i) => <th key={i}>{this._titleize(field)}</th>)}
         </tr>
       </thead>
     );
