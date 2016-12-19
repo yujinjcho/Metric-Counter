@@ -10,20 +10,5 @@ html
         min-width: 100px;
       }
   body
-    h1 Leaderboard
-    table
-      tr
-        th Name
-        th Count
-        th Days
-        th Average
-        th Progress
-        th Days Left
-      each user in users
-        tr
-          td= user.name
-          td= user.count
-          td= user.days
-          td= user.dailyAverage
-          td= user.progress
-          td= user.projectedDaysLeft
+    div#leaderboard
+    script(src='leaderboard_bundle.js' type='text/javascript')

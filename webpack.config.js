@@ -7,12 +7,13 @@ var HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
 })
 
 module.exports = {
-  entry: [
-    './src/index.js'
-  ],
+  entry: {
+    index: './src/index.js',
+    leaderboard:  './src/leaderboard.js'
+  },
   output: {
     path: __dirname + '/dist',
-    filename: "index_bundle.js"
+    filename: "[name]_bundle.js"
   },
   module: {
     loaders: [

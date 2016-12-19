@@ -54,6 +54,10 @@ app.get('/api/data', function(req, res) {
 });
 
 app.get('/leaderboard', function(req, res) {
+  res.render('leaderboard');
+});
+
+app.get('/api/leaderboard', function(req, res) {
   db.collection(config.mongoUsers).aggregate([
       {$group: {
         _id: {
@@ -62,7 +66,7 @@ app.get('/leaderboard', function(req, res) {
         }
       }}
     ], function(err, data) {
-      pushups.renderLeaderboard(db, res, data);
+      pushups.leaderboardData(db, res, data);
     }
   );
 });

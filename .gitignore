@@ -1,3 +1,4 @@
+dist
 node_modules
 localConfig.js
 mongodb_connect
