@@ -1,5 +1,6 @@
 import React from 'react';
 import $ from 'jquery';
+import SortableHeading from './SortableHeading';
 
 const fields = ['name', 'count', 'days', 'dailyAverage', 'progress', 'projectedDaysLeft'];
 
@@ -33,7 +34,7 @@ export default class Leaderboard extends React.Component {
     return (
       <thead>
         <tr>
-          {fields.map((field, i) => <th key={i}>{titleize(field)}</th>)}
+          {fields.map((field, i) => <SortableHeading key={i} text={field} />)}
         </tr>
       </thead>
     );
