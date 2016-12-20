@@ -4,10 +4,6 @@ import SortableHeading from './SortableHeading';
 
 const fields = ['name', 'count', 'days', 'dailyAverage', 'progress', 'projectedDaysLeft'];
 
-function titleize(field) {
-  return `${field[0].toUpperCase()}${field.slice(1)}`.match(/[A-Z]{1}[a-z]*/g).join(' ');
-}
-
 export default class Leaderboard extends React.Component {
   constructor() {
     super();

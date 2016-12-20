@@ -1,4 +1,5 @@
 import React from 'react';
+import { titleize } from '../utils';
 
 export default (props) => {
   return (
