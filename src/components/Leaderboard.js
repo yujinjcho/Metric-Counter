@@ -4,7 +4,6 @@ import SortableHeading from './SortableHeading';
 import { titleize } from '../utils';
 
 const fields = ['name', 'count', 'days', 'dailyAverage', 'progress', 'projectedDaysLeft'];
-const sortDelimiter = ':';
 
 function sortedUsers(users, { field, direction }) {
   return users.sort((a, b) => (parseFloat(a[field]) - parseFloat(b[field])) * direction);
