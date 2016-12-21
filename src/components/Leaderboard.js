@@ -3,11 +3,19 @@ import $ from 'jquery';
 import SortableHeading from './SortableHeading';
 
 const fields = ['name', 'count', 'days', 'dailyAverage', 'progress', 'projectedDaysLeft'];
+const sortDelimiter = ':';
+
+function sortedUsers(users, { field, direction }) {
+  return users.sort((a, b) => (a[field] - b[field]) * direction);
+}
 
 export default class Leaderboard extends React.Component {
   constructor() {
     super();
-    this.state = { users: [] };
+    this.state = {
+      users: [],
+      sort: { field: 'count', direction: -1 }
+    };
   }
 
   componentDidMount() {
@@ -37,7 +45,8 @@ export default class Leaderboard extends React.Component {
   }
 
   _renderBody() {
-    return <tbody>{this.state.users.map(this._renderUser)}</tbody>;
+    const { users, sort } = this.state;
+    return <tbody>{sortedUsers(users, sort).map(this._renderUser)}</tbody>;
   }
 
   _renderUser(user, i) {
