@@ -1,12 +1,13 @@
 import React from 'react';
 import $ from 'jquery';
 import SortableHeading from './SortableHeading';
+import { titleize } from '../utils';
 
 const fields = ['name', 'count', 'days', 'dailyAverage', 'progress', 'projectedDaysLeft'];
 const sortDelimiter = ':';
 
 function sortedUsers(users, { field, direction }) {
-  return users.sort((a, b) => (a[field] - b[field]) * direction);
+  return users.sort((a, b) => (parseFloat(a[field]) - parseFloat(b[field])) * direction);
 }
 
 export default class Leaderboard extends React.Component {
@@ -16,10 +17,16 @@ export default class Leaderboard extends React.Component {
       users: [],
       sort: { field: 'count', direction: -1 }
     };
+    this._handleSort = this._handleSort.bind(this);
   }
 
   componentDidMount() {
     $.get('/api/leaderboard', (data) => this.setState(data));
+  }
+
+  _handleSort(field) {
+    const { sort } = this.state;
+    this.setState({ sort: { field, direction: field === sort.field ? sort.direction * -1 : -1 } });
   }
 
   render() {
@@ -38,7 +45,10 @@ export default class Leaderboard extends React.Component {
     return (
       <thead>
         <tr>
-          {fields.map((field, i) => <SortableHeading key={i} text={field} />)}
+          <th>{titleize(fields[0])}</th>
+          {fields.slice(1).map((field, i) => (
+            <SortableHeading key={i} field={field} onSort={this._handleSort} />
+          ))}
         </tr>
       </thead>
     );
