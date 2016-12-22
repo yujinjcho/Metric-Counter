@@ -1,20 +1,31 @@
 import React from 'react';
 import $ from 'jquery';
+import SortableHeading from './SortableHeading';
+import { titleize } from '../utils';
 
 const fields = ['name', 'count', 'days', 'dailyAverage', 'progress', 'projectedDaysLeft'];
 
-function titleize(field) {
-  return `${field[0].toUpperCase()}${field.slice(1)}`.match(/[A-Z]{1}[a-z]*/g).join(' ');
+function sortedUsers(users, { field, direction }) {
+  return users.sort((a, b) => (parseFloat(a[field]) - parseFloat(b[field])) * direction);
 }
 
 export default class Leaderboard extends React.Component {
   constructor() {
     super();
-    this.state = { users: [] };
+    this.state = {
+      users: [],
+      sort: { field: 'count', direction: -1 }
+    };
+    this._handleSort = this._handleSort.bind(this);
   }
 
   componentDidMount() {
     $.get('/api/leaderboard', (data) => this.setState(data));
+  }
+
+  _handleSort(field) {
+    const { sort } = this.state;
+    this.setState({ sort: { field, direction: field === sort.field ? sort.direction * -1 : -1 } });
   }
 
   render() {
@@ -33,14 +44,18 @@ export default class Leaderboard extends React.Component {
     return (
       <thead>
         <tr>
-          {fields.map((field, i) => <th key={i}>{titleize(field)}</th>)}
+          <th>{titleize(fields[0])}</th>
+          {fields.slice(1).map((field, i) => (
+            <SortableHeading key={i} field={field} onSort={this._handleSort} />
+          ))}
         </tr>
       </thead>
     );
   }
 
   _renderBody() {
-    return <tbody>{this.state.users.map(this._renderUser)}</tbody>;
+    const { users, sort } = this.state;
+    return <tbody>{sortedUsers(users, sort).map(this._renderUser)}</tbody>;
   }
 
   _renderUser(user, i) {

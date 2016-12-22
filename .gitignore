@@ -2,3 +2,4 @@ dist
 node_modules
 localConfig.js
 mongodb_connect
+npm-debug.log
