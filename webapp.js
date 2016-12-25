@@ -48,7 +48,7 @@ app.get('/api/data', (req, res) => dataManager.loadData(req, res, db));
 
 app.get('/leaderboard', (req, res) => res.render('leaderboard'));
 
-app.get('/api/leaderboard', (req, res) => {
+app.get('/api/leaderboard', (req, res) =>
   db.collection(config.mongoUsers).aggregate(
     [{$group: {
       _id: {
@@ -57,8 +57,8 @@ app.get('/api/leaderboard', (req, res) => {
       }
     }}],
     (err, data) => pushups.leaderboardData(db, res, data)
-  );
-});
+  )
+);
 
 app.get('/api/categories', (req, res) => dataManager.loadCategories(req, res, db));
 
