@@ -1,20 +1,20 @@
-var config = process.env.PRODUCTION === 'true' ?
+const config = process.env.PRODUCTION === 'true' ?
   require('./config') :
   require('./localConfig');
 
-var assert = require('assert');
+const assert = require('assert');
 
-var MongoClient = require('mongodb').MongoClient;
-var passport = require('passport');
-var Strategy = require('passport-facebook').Strategy;
+const MongoClient = require('mongodb').MongoClient;
+const passport = require('passport');
+const Strategy = require('passport-facebook').Strategy;
 
-var express = require('express');
-var bodyParser = require('body-parser');
-var session = require('express-session');
-var pushups = require('./app_modules/pushups');
-var dataManager = require('./app_modules/dataManager');
+const express = require('express');
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const pushups = require('./app_modules/pushups');
+const dataManager = require('./app_modules/dataManager');
 
-var app = express();
+const app = express();
 var db;
 
 app.set('views', './views');
