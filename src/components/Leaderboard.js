@@ -31,7 +31,9 @@ export default class Leaderboard extends React.Component {
   render() {
     return (
       <div>
-        <h1>Leaderboard</h1>
+        <div className="well well-lg">
+          <h1 className="text-center">Leaderboard</h1>
+        </div>
         <table className="table">
           {this._renderHeading()}
           {this._renderBody()}
