@@ -32,7 +32,7 @@ export default class Leaderboard extends React.Component {
     return (
       <div>
         <h1>Leaderboard</h1>
-        <table>
+        <table className="table">
           {this._renderHeading()}
           {this._renderBody()}
         </table>
