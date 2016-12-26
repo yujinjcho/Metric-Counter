@@ -15,7 +15,7 @@ const pushups = require('./app_modules/pushups');
 const dataManager = require('./app_modules/dataManager');
 
 const app = express();
-var db;
+let db;
 
 app.set('views', './views');
 app.set('view engine', 'pug');
@@ -81,7 +81,7 @@ app.get('/login', passport.authenticate('facebook'));
 
 app.get(
   '/logout',
-  (req, res) => {req.session.destroy((err) => { res.redirect('/') })}
+  (req, res) => req.session.destroy((err) => { res.redirect('/') })
 );
 
 app.get(
@@ -92,8 +92,8 @@ app.get(
 
 MongoClient.connect(config.mongoDev, (err, dbConnection) => {
   db = dbConnection;
-  let server = app.listen(config.port, () => {
-    let port = server.address().port;
+  const server = app.listen(config.port, () => {
+    const port = server.address().port;
     console.log('Started server at port:', port);
   });
 });
