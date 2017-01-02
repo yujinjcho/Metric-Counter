@@ -15,9 +15,10 @@ function createDateLabels() {
   var dateObj = new Date();
 
   for (i = 0; i < 6; i++) {
+    var year = dateObj.getFullYear() - 2000;
     var month = dateObj.getMonth() + 1;
     var date = dateObj.getDate() ;
-    var label =  month + '-' + date;
+    var label = `${month}-${date}-${year}`;
     dates.unshift(label);
     dateObj.setDate(dateObj.getDate() - 1);
   };
@@ -28,7 +29,8 @@ function createDateLabels() {
 function formatDaily(aggregatedDailyData, datesInput) {
   var dataDict = aggregatedDailyData.reduce(
     function(d, item) {
-      d[item._id] = item.count;
+      var dateLabel = `${item._id.monthDay}-${item._id.year-2000}`
+      d[dateLabel] = item.count;
       return d;
     }, {}
   );
