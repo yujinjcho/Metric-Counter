@@ -24,7 +24,7 @@ var ChartInstance = React.createClass({
   formatData: function() {
     var chartData = {
       x: 'x',
-      xFormat: '%m-%d-%y',
+      xFormat: '%m-%d-%Y',
       columns: [this.props.dates, this.props.data],
       types: {
         daily: 'bar'
