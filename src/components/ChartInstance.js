@@ -11,7 +11,7 @@ var ChartInstance = React.createClass({
           type: 'timeseries',
           localtime: false,
           tick: {
-            format: '%m-%d'
+            format: '%m-%d-%y'
           }
         }
       },
@@ -24,7 +24,7 @@ var ChartInstance = React.createClass({
   formatData: function() {
     var chartData = {
       x: 'x',
-      xFormat: '%m-%d',
+      xFormat: '%m-%d-%Y',
       columns: [this.props.dates, this.props.data],
       types: {
         daily: 'bar'

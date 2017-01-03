@@ -48,7 +48,10 @@ function getDailyandTotalData(date, res, userId, category, db) {
       ]
     }},
     {$group: {
-      _id: '$monthDay',
+      _id: {
+        "monthDay": "$monthDay",
+        "year": {$year: "$date"}
+      },
       count: {$sum: '$amount'}
     }}
   ], function(err, data) {
