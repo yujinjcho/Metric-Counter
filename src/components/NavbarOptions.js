@@ -1,25 +1,22 @@
-var React = require('react');
-var UserOptions = require('./UserOptions');
+import React from 'react';
+import UserOptions from './UserOptions';
+import '../../static/css/navbar-options.css';
 
-require('../../static/css/navbar-options.css');
-
-var NavbarOptions = React.createClass({
-  render: function() {
-    return (
-      <div className = {this.props.options}>
-        <UserOptions
-          options = {this.props.navbarOptionsName}
-          loginName = {this.props.loginName}
-          accountName = {this.props.accountName}
-          user = {this.props.user}
-          categories = {this.props.categories}
-          change = {this.props.change}
-          collapse = {this.props.collapse}
-          activeCategory = {this.props.activeCategory}
-        />
-      </div>
-    )
-  }
-});
+const NavbarOptions = (props) => {
+  return (
+    <div className = {props.options}>
+      <UserOptions
+        options = {props.navbarOptionsName}
+        loginName = {props.loginName}
+        accountName = {props.accountName}
+        user = {props.user}
+        categories = {props.categories}
+        change = {props.change}
+        collapse = {props.collapse}
+        activeCategory = {props.activeCategory}
+      />
+    </div>
+  );
+};
 
 module.exports = NavbarOptions;
